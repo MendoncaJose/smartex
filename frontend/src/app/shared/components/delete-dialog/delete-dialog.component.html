@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Confirm delete</h2>
+<h2 mat-dialog-title>{{ data.title }}</h2>
 
 <mat-dialog-content>
   <p>{{ data.message }}</p>
@@ -6,7 +6,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="ref.close(false)">Cancel</button>
-  <button mat-flat-button color="warn" (click)="ref.close(true)">
+  <button mat-flat-button class="btn-delete" (click)="ref.close(true)">
     {{ data.confirmLabel ?? 'Delete' }}
   </button>
 </mat-dialog-actions>

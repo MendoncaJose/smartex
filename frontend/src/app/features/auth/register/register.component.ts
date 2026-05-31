@@ -51,7 +51,7 @@ export class RegisterComponent {
 
     this.auth.register(email!, password!).subscribe({
       next: () => {
-        this.toast.success('Account created successfully!');
+        this.toast.success('Account created');
         this.router.navigate(['/products']);
       },
       error: (err: HttpErrorResponse) => {

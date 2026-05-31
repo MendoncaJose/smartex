@@ -1,7 +1,6 @@
 <div class="drawer">
-
   <div class="drawer-header">
-    <h2 class="drawer-title">{{ isEdit ? 'Edit category' : 'New category' }}</h2>
+    <h2 class="drawer-title">{{ isEdit ? 'Edit category' : 'Create category' }}</h2>
     <button mat-icon-button type="button" aria-label="Close" (click)="cancel()">
       <mat-icon aria-hidden="true">close</mat-icon>
     </button>
@@ -25,9 +24,8 @@
       @if (loading()) {
         <mat-spinner diameter="18" />
       } @else {
-        {{ isEdit ? 'Update' : 'Create' }}
+        {{ isEdit ? 'Save changes' : 'Create ' }}
       }
     </button>
   </div>
-
 </div>

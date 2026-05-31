@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 
 export interface DeleteDialogData {
+  title: string;
   message: string;
   confirmLabel?: string;
 }

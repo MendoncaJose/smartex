@@ -1,7 +1,6 @@
 <div class="drawer">
-
   <div class="drawer-header">
-    <h2 class="drawer-title">{{ isEdit ? 'Edit product' : 'New product' }}</h2>
+    <h2 class="drawer-title">{{ isEdit ? 'Edit product' : 'Create product' }}</h2>
     <button mat-icon-button type="button" aria-label="Close" (click)="cancel()">
       <mat-icon aria-hidden="true">close</mat-icon>
     </button>
@@ -9,7 +8,6 @@
 
   <div class="drawer-body">
     <form [formGroup]="form">
-
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" placeholder="Product title" maxlength="255" />
@@ -28,7 +26,13 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description" rows="4" placeholder="Optional description" maxlength="2000"></textarea>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="4"
+          placeholder="Optional description"
+          maxlength="2000"
+        ></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -42,7 +46,6 @@
           <mat-error>Select at least one category</mat-error>
         }
       </mat-form-field>
-
     </form>
   </div>
 
@@ -52,9 +55,8 @@
       @if (loading()) {
         <mat-spinner diameter="18" />
       } @else {
-        {{ isEdit ? 'Update' : 'Create' }}
+        {{ isEdit ? 'Save changes' : 'Create' }}
       }
     </button>
   </div>
-
 </div>

@@ -1,6 +1,10 @@
 <mat-drawer-container class="drawer-container" autosize>
-
-  <mat-drawer position="end" mode="over" [opened]="drawerOpen()" (closedStart)="drawerOpen.set(false)">
+  <mat-drawer
+    position="end"
+    mode="over"
+    [opened]="drawerOpen()"
+    (closedStart)="drawerOpen.set(false)"
+  >
     <app-product-drawer
       [product]="editingProduct()"
       [categories]="categories()"
@@ -10,7 +14,6 @@
   </mat-drawer>
 
   <div class="page-container">
-
     <!-- Toolbar -->
     <div class="page-toolbar">
       <h1 class="page-title">Products</h1>
@@ -34,7 +37,7 @@
 
         <button mat-flat-button (click)="openCreate()">
           <mat-icon>add</mat-icon>
-          New product
+          Create product
         </button>
       </div>
     </div>
@@ -58,8 +61,8 @@
       <div class="empty-state">
         @if (!searchControl.value && !categoryControl.value) {
           <mat-icon aria-hidden="true">inventory_2</mat-icon>
-          <p>No products yet. Add your first one.</p>
-          <button mat-flat-button (click)="openCreate()">Add product</button>
+          <p>No products yet. Create your first one.</p>
+          <button mat-flat-button (click)="openCreate()">Create</button>
         } @else {
           <mat-icon aria-hidden="true">search_off</mat-icon>
           <p>No products match your filters.</p>
@@ -89,7 +92,5 @@
         showFirstLastButtons
       />
     }
-
   </div>
-
 </mat-drawer-container>

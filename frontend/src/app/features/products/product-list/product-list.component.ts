@@ -131,7 +131,7 @@ export class ProductListComponent implements OnInit {
 
   confirmDelete(product: Product) {
     const ref = this.dialog.open(DeleteDialogComponent, {
-      data: { message: `Delete "${product.title}"?` },
+      data: { title: `Delete "${product.title}"?`, message: 'This cannot be undone.' },
       width: '360px',
     });
 

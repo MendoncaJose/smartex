@@ -2,3 +2,12 @@ mat-dialog-content p {
   margin: 0;
   color: var(--c-ink);
 }
+
+.btn-delete {
+  background-color: var(--c-error) !important;
+  color: oklch(1 0 0) !important;
+
+  &:hover {
+    background-color: oklch(0.42 0.22 25) !important;
+  }
+}

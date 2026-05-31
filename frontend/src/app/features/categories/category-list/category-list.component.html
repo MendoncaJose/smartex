@@ -1,6 +1,10 @@
 <mat-drawer-container class="drawer-container" autosize>
-
-  <mat-drawer position="end" mode="over" [opened]="drawerOpen()" (closedStart)="drawerOpen.set(false)">
+  <mat-drawer
+    position="end"
+    mode="over"
+    [opened]="drawerOpen()"
+    (closedStart)="drawerOpen.set(false)"
+  >
     <app-category-drawer
       [category]="editingCategory()"
       (saved)="onSaved()"
@@ -9,7 +13,6 @@
   </mat-drawer>
 
   <div class="page-container">
-
     <!-- Toolbar -->
     <div class="page-toolbar">
       <h1 class="page-title">Categories</h1>
@@ -23,7 +26,7 @@
 
         <button mat-flat-button (click)="openCreate()">
           <mat-icon>add</mat-icon>
-          New category
+          Create category
         </button>
       </div>
     </div>
@@ -37,8 +40,8 @@
       <div class="empty-state">
         @if (categories().length === 0) {
           <mat-icon aria-hidden="true">category</mat-icon>
-          <p>No categories yet. Add your first one.</p>
-          <button mat-flat-button (click)="openCreate()">Add category</button>
+          <p>No categories yet. Create your first one.</p>
+          <button mat-flat-button (click)="openCreate()">Create</button>
         } @else {
           <mat-icon aria-hidden="true">search_off</mat-icon>
           <p>No categories match "{{ searchControl.value }}".</p>
@@ -47,7 +50,6 @@
     } @else {
       <div class="table-wrapper">
         <table mat-table [dataSource]="filtered()">
-
           <!-- Name -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -66,10 +68,21 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let cat" class="actions-cell">
-              <button mat-icon-button matTooltip="Edit" aria-label="Edit category" (click)="openEdit(cat)">
+              <button
+                mat-icon-button
+                matTooltip="Edit"
+                aria-label="Edit category"
+                (click)="openEdit(cat)"
+              >
                 <mat-icon aria-hidden="true">edit</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Delete" aria-label="Delete category" color="warn" (click)="confirmDelete(cat)">
+              <button
+                mat-icon-button
+                matTooltip="Delete"
+                aria-label="Delete category"
+                color="warn"
+                (click)="confirmDelete(cat)"
+              >
                 <mat-icon aria-hidden="true">delete</mat-icon>
               </button>
             </td>
@@ -77,11 +90,8 @@
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns"></tr>
-
         </table>
       </div>
     }
-
   </div>
-
 </mat-drawer-container>

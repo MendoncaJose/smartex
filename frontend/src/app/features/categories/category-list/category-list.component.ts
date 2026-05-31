@@ -99,7 +99,7 @@ export class CategoryListComponent implements OnInit {
 
   confirmDelete(category: Category) {
     const ref = this.dialog.open(DeleteDialogComponent, {
-      data: { message: `Delete "${category.name}"?` },
+      data: { title: `Delete "${category.name}"?`, message: 'This cannot be undone.' },
       width: '360px',
     });
 
