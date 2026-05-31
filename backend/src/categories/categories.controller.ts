@@ -14,31 +14,24 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-
-interface AuthUser {
-  id: number;
-  email: string;
-}
+import type { JwtUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
-  findAll(@CurrentUser() user: AuthUser) {
+  findAll(@CurrentUser() user: JwtUser) {
     return this.categoriesService.findAll(user.id);
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: AuthUser,
-  ) {
+  findOne(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: JwtUser) {
     return this.categoriesService.findOne(id, user.id);
   }
 
   @Post()
-  create(@Body() dto: CreateCategoryDto, @CurrentUser() user: AuthUser) {
+  create(@Body() dto: CreateCategoryDto, @CurrentUser() user: JwtUser) {
     return this.categoriesService.create(dto, user.id);
   }
 
@@ -46,14 +39,14 @@ export class CategoriesController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateCategoryDto,
-    @CurrentUser() user: AuthUser,
+    @CurrentUser() user: JwtUser,
   ) {
     return this.categoriesService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: AuthUser) {
+  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: JwtUser) {
     return this.categoriesService.remove(id, user.id);
   }
 }

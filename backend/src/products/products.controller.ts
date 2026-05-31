@@ -16,31 +16,24 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FilterProductDto } from './dto/filter-product.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-
-interface AuthUser {
-  id: number;
-  email: string;
-}
+import type { JwtUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll(@Query() filters: FilterProductDto, @CurrentUser() user: AuthUser) {
+  findAll(@Query() filters: FilterProductDto, @CurrentUser() user: JwtUser) {
     return this.productsService.findAll(user.id, filters);
   }
 
   @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: AuthUser,
-  ) {
+  findOne(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: JwtUser) {
     return this.productsService.findOne(id, user.id);
   }
 
   @Post()
-  create(@Body() dto: CreateProductDto, @CurrentUser() user: AuthUser) {
+  create(@Body() dto: CreateProductDto, @CurrentUser() user: JwtUser) {
     return this.productsService.create(dto, user.id);
   }
 
@@ -48,14 +41,14 @@ export class ProductsController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateProductDto,
-    @CurrentUser() user: AuthUser,
+    @CurrentUser() user: JwtUser,
   ) {
     return this.productsService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: AuthUser) {
+  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: JwtUser) {
     return this.productsService.remove(id, user.id);
   }
 }
