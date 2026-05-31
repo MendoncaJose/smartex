@@ -41,17 +41,27 @@
 
     <!-- Grid -->
     @if (loading()) {
-      <div class="loading-state">
-        <mat-spinner diameter="48" />
+      <div class="products-grid" aria-busy="true" aria-label="Loading products">
+        @for (i of skeletonItems; track i) {
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-price"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-desc"></div>
+            <div class="skeleton skeleton-chips">
+              <div class="skeleton skeleton-chip"></div>
+              <div class="skeleton skeleton-chip"></div>
+            </div>
+          </div>
+        }
       </div>
     } @else if (products().length === 0) {
       <div class="empty-state">
         @if (!searchControl.value && !categoryControl.value) {
-          <mat-icon>inventory_2</mat-icon>
+          <mat-icon aria-hidden="true">inventory_2</mat-icon>
           <p>No products yet. Add your first one.</p>
           <button mat-flat-button (click)="openCreate()">Add product</button>
         } @else {
-          <mat-icon>search_off</mat-icon>
+          <mat-icon aria-hidden="true">search_off</mat-icon>
           <p>No products match your filters.</p>
           <button mat-button (click)="clearFilters()">Clear filters</button>
         }

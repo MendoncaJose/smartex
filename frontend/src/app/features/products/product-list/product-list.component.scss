@@ -77,6 +77,42 @@
   }
 }
 
+// ── Skeleton loading ──────────────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton-card {
+  background: var(--c-surface);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 160px;
+}
+
+.skeleton {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--c-surface-variant) 25%,
+    oklch(0.98 0.003 145) 50%,
+    var(--c-surface-variant) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+.skeleton-price  { height: 22px; width: 70px; }
+.skeleton-title  { height: 16px; width: 80%; }
+.skeleton-desc   { height: 12px; width: 60%; }
+.skeleton-chips  { display: flex; gap: 6px; }
+.skeleton-chip   { height: 22px; width: 54px; border-radius: 9999px; }
+
 mat-paginator {
   background: transparent;
   --mat-paginator-container-text-color: var(--c-muted);

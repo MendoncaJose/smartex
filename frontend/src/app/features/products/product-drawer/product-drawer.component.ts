@@ -68,6 +68,11 @@ export class ProductDrawerComponent {
     return this.product() !== null;
   }
 
+  cancel(): void {
+    if (this.form.dirty && !confirm('Discard unsaved changes?')) return;
+    this.cancelled.emit();
+  }
+
   submit(): void {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;

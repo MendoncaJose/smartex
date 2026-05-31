@@ -52,6 +52,7 @@ export class ProductListComponent implements OnInit {
   readonly page = signal(0);
   readonly limit = signal(24);
   readonly pageSizeOptions = [12, 24, 48];
+  readonly skeletonItems = Array.from({ length: 6 }, (_, i) => i);
 
   readonly searchControl = new FormControl('');
   readonly categoryControl = new FormControl<number | null>(null);
@@ -144,10 +145,6 @@ export class ProductListComponent implements OnInit {
         error: () => this.toast.error('Failed to delete product'),
       });
     });
-  }
-
-  clearCategory() {
-    this.categoryControl.setValue(null);
   }
 
   clearFilters() {
