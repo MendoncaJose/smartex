@@ -1,5 +1,5 @@
-import { Component, DestroyRef, inject, signal, computed, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
@@ -42,13 +42,20 @@ export class CategoryListComponent implements OnInit {
   private readonly categoriesService = inject(CategoriesService);
   private readonly toast = inject(ToastService);
   private readonly dialog = inject(MatDialog);
-  private readonly destroyRef = inject(DestroyRef);
 
   readonly categories = signal<Category[]>([]);
   readonly loading = signal(false);
 
   readonly searchControl = new FormControl('');
-  readonly searchTerm = signal('');
+  readonly searchTerm = toSignal(
+    this.searchControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => value ?? ''),
+      debounceTime(250),
+      distinctUntilChanged(),
+    ),
+    { initialValue: '' },
+  );
 
   readonly filtered = computed(() => {
     const term = this.searchTerm().toLowerCase();
@@ -64,14 +71,6 @@ export class CategoryListComponent implements OnInit {
 
   ngOnInit() {
     this.loadCategories();
-
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(250),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((v) => this.searchTerm.set(v ?? ''));
   }
 
   loadCategories() {
