@@ -20,11 +20,4 @@ export class ToastService {
     this.toastr.error(message, title, { ...this.defaultOptions, ...options });
   }
 
-  warning(message: string, title = 'Warning', options?: Partial<IndividualConfig>) {
-    this.toastr.warning(message, title, { ...this.defaultOptions, ...options });
-  }
-
-  info(message: string, title = 'Info', options?: Partial<IndividualConfig>) {
-    this.toastr.info(message, title, { ...this.defaultOptions, ...options });
-  }
 }

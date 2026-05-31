@@ -3,32 +3,32 @@
 // ── Design system tokens ──────────────────────────────────────────────────────
 :root {
   // Primary — Botanical Confidence
-  --c-primary:               oklch(0.42 0.18 145);
-  --c-primary-hover:         oklch(0.37 0.16 145);
-  --c-primary-container:     oklch(0.93 0.06 145);
-  --c-on-primary:            oklch(1.000 0.000 0);
-  --c-on-primary-container:  oklch(0.22 0.12 145);
+  --c-primary: oklch(0.42 0.18 145);
+  --c-primary-hover: oklch(0.37 0.16 145);
+  --c-primary-container: oklch(0.93 0.06 145);
+  --c-on-primary: oklch(1 0 0);
+  --c-on-primary-container: oklch(0.22 0.12 145);
 
   // Navigation — Night Garden
-  --c-sidebar:               oklch(0.15 0.035 145);
-  --c-sidebar-accent:        oklch(0.76 0.16 145);
-  --c-sidebar-text:          oklch(0.62 0.055 145);
-  --c-sidebar-text-active:   oklch(0.96 0.015 145);
+  --c-sidebar: oklch(0.15 0.035 145);
+  --c-sidebar-accent: oklch(0.76 0.16 145);
+  --c-sidebar-text: oklch(0.62 0.055 145);
+  --c-sidebar-text-active: oklch(0.96 0.015 145);
 
   // Surfaces
-  --c-surface:               oklch(1.000 0.000 0);
-  --c-surface-variant:       oklch(0.96 0.005 145);
+  --c-surface: oklch(1 0 0);
+  --c-surface-variant: oklch(0.96 0.005 145);
 
   // Text
-  --c-ink:                   oklch(0.17 0.008 145);
-  --c-muted:                 oklch(0.46 0.010 145);
+  --c-ink: oklch(0.17 0.008 145);
+  --c-muted: oklch(0.46 0.01 145);
 
   // Borders
-  --c-outline:               oklch(0.68 0.010 145);
-  --c-outline-variant:       oklch(0.88 0.006 145);
+  --c-outline: oklch(0.68 0.01 145);
+  --c-outline-variant: oklch(0.88 0.006 145);
 
   // Semantic
-  --c-error:                 oklch(0.53 0.22 25);
+  --c-error: oklch(0.53 0.22 25);
 }
 
 html {
@@ -36,9 +36,9 @@ html {
   @include mat.theme(
     (
       color: (
-        primary:   mat.$green-palette,
+        primary: mat.$green-palette,
         secondary: mat.$green-palette,
-        tertiary:  mat.$cyan-palette,
+        tertiary: mat.$cyan-palette,
       ),
       typography: 'DM Sans',
       density: 0,
@@ -46,74 +46,74 @@ html {
   );
 
   // Color overrides
-  --mat-sys-primary:                var(--c-primary);
-  --mat-sys-on-primary:             var(--c-on-primary);
-  --mat-sys-primary-container:      var(--c-primary-container);
-  --mat-sys-on-primary-container:   var(--c-on-primary-container);
-  --mat-sys-secondary-container:    var(--c-primary-container);
+  --mat-sys-primary: var(--c-primary);
+  --mat-sys-on-primary: var(--c-on-primary);
+  --mat-sys-primary-container: var(--c-primary-container);
+  --mat-sys-on-primary-container: var(--c-on-primary-container);
+  --mat-sys-secondary-container: var(--c-primary-container);
   --mat-sys-on-secondary-container: var(--c-on-primary-container);
-  --mat-sys-surface:                var(--c-surface);
-  --mat-sys-surface-variant:        var(--c-surface-variant);
-  --mat-sys-on-surface:             var(--c-ink);
-  --mat-sys-on-surface-variant:     var(--c-muted);
-  --mat-sys-outline:                var(--c-outline);
-  --mat-sys-outline-variant:        var(--c-outline-variant);
-  --mat-sys-error:                  var(--c-error);
-  --mat-sys-on-error:               var(--c-on-primary);
+  --mat-sys-surface: var(--c-surface);
+  --mat-sys-surface-variant: var(--c-surface-variant);
+  --mat-sys-on-surface: var(--c-ink);
+  --mat-sys-on-surface-variant: var(--c-muted);
+  --mat-sys-outline: var(--c-outline);
+  --mat-sys-outline-variant: var(--c-outline-variant);
+  --mat-sys-error: var(--c-error);
+  --mat-sys-on-error: var(--c-on-primary);
 
   // Font family — all roles
-  --mat-sys-body-font:     'DM Sans', system-ui, sans-serif;
-  --mat-sys-label-font:    'DM Sans', system-ui, sans-serif;
-  --mat-sys-title-font:    'DM Sans', system-ui, sans-serif;
+  --mat-sys-body-font: 'DM Sans', system-ui, sans-serif;
+  --mat-sys-label-font: 'DM Sans', system-ui, sans-serif;
+  --mat-sys-title-font: 'DM Sans', system-ui, sans-serif;
   --mat-sys-headline-font: 'DM Sans', system-ui, sans-serif;
-  --mat-sys-display-font:  'DM Sans', system-ui, sans-serif;
+  --mat-sys-display-font: 'DM Sans', system-ui, sans-serif;
 
   // Type scale — body
-  --mat-sys-body-large-size:        1rem;
+  --mat-sys-body-large-size: 1rem;
   --mat-sys-body-large-line-height: 1.5rem;
-  --mat-sys-body-large-weight:      400;
-  --mat-sys-body-large-tracking:    0;
-  --mat-sys-body-medium-size:       1rem;
+  --mat-sys-body-large-weight: 400;
+  --mat-sys-body-large-tracking: 0;
+  --mat-sys-body-medium-size: 1rem;
   --mat-sys-body-medium-line-height: 1.5rem;
-  --mat-sys-body-medium-weight:     400;
-  --mat-sys-body-medium-tracking:   0;
+  --mat-sys-body-medium-weight: 400;
+  --mat-sys-body-medium-tracking: 0;
 
   // Type scale — label (buttons, form labels, table headers, nav)
-  --mat-sys-label-large-size:        0.875rem;
+  --mat-sys-label-large-size: 0.875rem;
   --mat-sys-label-large-line-height: 1.25rem;
-  --mat-sys-label-large-weight:      500;
-  --mat-sys-label-large-tracking:    0;
-  --mat-sys-label-medium-size:       0.875rem;
+  --mat-sys-label-large-weight: 500;
+  --mat-sys-label-large-tracking: 0;
+  --mat-sys-label-medium-size: 0.875rem;
   --mat-sys-label-medium-line-height: 1.25rem;
-  --mat-sys-label-medium-weight:     500;
-  --mat-sys-label-medium-tracking:   0;
-  --mat-sys-label-small-size:        0.75rem;
+  --mat-sys-label-medium-weight: 500;
+  --mat-sys-label-medium-tracking: 0;
+  --mat-sys-label-small-size: 0.75rem;
   --mat-sys-label-small-line-height: 1rem;
-  --mat-sys-label-small-weight:      400;
+  --mat-sys-label-small-weight: 400;
 
   // Type scale — title (card titles, dialog titles, drawer titles)
-  --mat-sys-title-large-size:        1.25rem;
+  --mat-sys-title-large-size: 1.25rem;
   --mat-sys-title-large-line-height: 1.75rem;
-  --mat-sys-title-large-weight:      600;
-  --mat-sys-title-large-tracking:    -0.02em;
-  --mat-sys-title-medium-size:       1rem;
+  --mat-sys-title-large-weight: 600;
+  --mat-sys-title-large-tracking: -0.02em;
+  --mat-sys-title-medium-size: 1rem;
   --mat-sys-title-medium-line-height: 1.5rem;
-  --mat-sys-title-medium-weight:     600;
-  --mat-sys-title-medium-tracking:   0;
-  --mat-sys-title-small-size:        0.875rem;
+  --mat-sys-title-medium-weight: 600;
+  --mat-sys-title-medium-tracking: 0;
+  --mat-sys-title-small-size: 0.875rem;
   --mat-sys-title-small-line-height: 1.25rem;
-  --mat-sys-title-small-weight:      500;
-  --mat-sys-title-small-tracking:    0;
+  --mat-sys-title-small-weight: 500;
+  --mat-sys-title-small-tracking: 0;
 
   // Type scale — headline
-  --mat-sys-headline-medium-size:        1.5rem;
+  --mat-sys-headline-medium-size: 1.5rem;
   --mat-sys-headline-medium-line-height: 2rem;
-  --mat-sys-headline-medium-weight:      600;
-  --mat-sys-headline-medium-tracking:    -0.02em;
-  --mat-sys-headline-small-size:         1.25rem;
-  --mat-sys-headline-small-line-height:  1.75rem;
-  --mat-sys-headline-small-weight:       600;
-  --mat-sys-headline-small-tracking:     -0.02em;
+  --mat-sys-headline-medium-weight: 600;
+  --mat-sys-headline-medium-tracking: -0.02em;
+  --mat-sys-headline-small-size: 1.25rem;
+  --mat-sys-headline-small-line-height: 1.75rem;
+  --mat-sys-headline-small-weight: 600;
+  --mat-sys-headline-small-tracking: -0.02em;
 }
 
 body {
@@ -127,7 +127,9 @@ body {
   height: 100%;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 // ── Focus ring baseline (non-Material elements) ───────────────────────────────
 a:focus-visible {
@@ -137,7 +139,12 @@ a:focus-visible {
 }
 
 // ── Global heading baseline ───────────────────────────────────────────────────
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'DM Sans', system-ui, sans-serif;
   font-weight: 600;
   color: var(--c-ink);
@@ -166,60 +173,75 @@ h3 {
 
 // ── Toast notifications ───────────────────────────────────────────────────────
 .toast-container .ngx-toastr {
-  width: 380px !important;
-  border-radius: 8px;
-  background-color: var(--c-surface);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  padding: 14px 20px 14px 56px;
+  width: 340px !important;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  padding: 14px 44px 14px 52px;
   font-family: 'DM Sans', system-ui, sans-serif;
-  transition: box-shadow 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 
-  &:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); }
+  &:hover {
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.26),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+  }
 
   .toast-title {
     font-weight: 600;
     font-size: 0.875rem;
-    margin-bottom: 2px;
+    line-height: 1.3;
+    color: #fff;
   }
 
   .toast-message {
-    color: var(--c-muted);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 2px;
   }
 
   .toast-close-button {
-    font-size: 1rem;
-    opacity: 0.6;
-    &:hover { opacity: 1; }
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.65);
+    text-shadow: none;
+    &:hover {
+      color: #fff;
+      opacity: 1;
+    }
   }
 
-  @media (max-width: 480px) { width: 100% !important; }
+  @media (max-width: 480px) {
+    width: calc(100vw - 32px) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
 }
 
 .toast-success {
-  background-color: var(--c-surface);
-  .toast-title        { color: oklch(0.38 0.16 145); }
-  .toast-progress     { background-color: oklch(0.38 0.16 145); }
-  .toast-close-button { color: oklch(0.38 0.16 145); }
+  background-color: oklch(0.38 0.16 145);
+  .toast-progress {
+    background-color: rgba(255, 255, 255, 0.35);
+  }
 }
 
 .toast-error {
-  background-color: var(--c-surface);
-  .toast-title        { color: var(--c-error); }
-  .toast-progress     { background-color: var(--c-error); }
-  .toast-close-button { color: var(--c-error); }
+  background-color: oklch(0.48 0.22 25);
+  .toast-progress {
+    background-color: rgba(255, 255, 255, 0.35);
+  }
 }
 
-.toast-warning {
-  background-color: var(--c-surface);
-  .toast-title        { color: oklch(0.55 0.18 50); }
-  .toast-progress     { background-color: oklch(0.55 0.18 50); }
-  .toast-close-button { color: oklch(0.55 0.18 50); }
-}
-
-.toast-info {
-  background-color: var(--c-surface);
-  .toast-title        { color: oklch(0.50 0.14 230); }
-  .toast-progress     { background-color: oklch(0.50 0.14 230); }
-  .toast-close-button { color: oklch(0.50 0.14 230); }
-}

@@ -14,7 +14,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         toast.error('Cannot reach the server. Check your connection.', 'Connection error');
       } else if (err.status === 401 && !req.url.includes('/auth/')) {
         auth.logout();
-        toast.warning('Your session expired. Sign in again.', 'Session expired');
+        toast.error('Your session expired. Sign in again.', 'Session expired');
       }
       return throwError(() => err);
     }),
