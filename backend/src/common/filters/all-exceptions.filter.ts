@@ -30,7 +30,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const errorMessage =
       typeof message === 'string'
         ? message
-        : (message as any).message ?? 'Internal server error';
+        : ((message as any).message ?? 'Internal server error');
 
     if (status >= 500) {
       this.logger.error(

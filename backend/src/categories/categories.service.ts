@@ -40,7 +40,11 @@ export class CategoriesService {
     return saved;
   }
 
-  async update(id: number, dto: UpdateCategoryDto, userId: number): Promise<Category> {
+  async update(
+    id: number,
+    dto: UpdateCategoryDto,
+    userId: number,
+  ): Promise<Category> {
     const category = await this.findOne(id, userId);
     Object.assign(category, dto);
     const saved = await this.categoriesRepository.save(category);

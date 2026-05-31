@@ -80,7 +80,11 @@ export class ProductsService {
     return saved;
   }
 
-  async update(id: number, dto: UpdateProductDto, userId: number): Promise<Product> {
+  async update(
+    id: number,
+    dto: UpdateProductDto,
+    userId: number,
+  ): Promise<Product> {
     const product = await this.findOne(id, userId);
 
     if (dto.title !== undefined) product.title = dto.title;
@@ -88,7 +92,10 @@ export class ProductsService {
     if (dto.price !== undefined) product.price = dto.price;
 
     if (dto.categoryIds !== undefined) {
-      product.categories = await this.resolveCategories(dto.categoryIds, userId);
+      product.categories = await this.resolveCategories(
+        dto.categoryIds,
+        userId,
+      );
     }
 
     const saved = await this.productsRepository.save(product);
@@ -102,7 +109,10 @@ export class ProductsService {
     this.logger.log(`Product deleted id=${id} userId=${userId}`);
   }
 
-  private async resolveCategories(categoryIds: number[], userId: number): Promise<Category[]> {
+  private async resolveCategories(
+    categoryIds: number[],
+    userId: number,
+  ): Promise<Category[]> {
     const categories = await Promise.all(
       categoryIds.map((catId) =>
         this.categoriesRepository.findOne({ where: { id: catId } }),
@@ -111,12 +121,16 @@ export class ProductsService {
 
     const missing = categoryIds.filter((_, i) => !categories[i]);
     if (missing.length) {
-      throw new NotFoundException(`Categories not found: ${missing.join(', ')}`);
+      throw new NotFoundException(
+        `Categories not found: ${missing.join(', ')}`,
+      );
     }
 
     const forbidden = categories.filter((c) => c!.userId !== userId);
     if (forbidden.length) {
-      throw new BadRequestException('One or more categories do not belong to you');
+      throw new BadRequestException(
+        'One or more categories do not belong to you',
+      );
     }
 
     return categories as Category[];

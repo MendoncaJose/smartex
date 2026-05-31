@@ -16,7 +16,11 @@ import { JwtGuard } from './guards/jwt.guard';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.getOrThrow<string>('JWT_SECRET'),
-        signOptions: { expiresIn: config.getOrThrow<string>('JWT_EXPIRES_IN') as `${number}${'s'|'m'|'h'|'d'}` },
+        signOptions: {
+          expiresIn: config.getOrThrow<string>(
+            'JWT_EXPIRES_IN',
+          ) as `${number}${'s' | 'm' | 'h' | 'd'}`,
+        },
       }),
     }),
   ],

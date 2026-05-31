@@ -37,7 +37,10 @@ describe('AuthService', () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
       mockUsersService.create.mockResolvedValue(mockUser);
 
-      const result = await service.register({ email: 'test@smartex.com', password: 'Test123!' });
+      const result = await service.register({
+        email: 'test@smartex.com',
+        password: 'Test123!',
+      });
 
       expect(result).toHaveProperty('accessToken', 'mock-token');
       expect(mockUsersService.create).toHaveBeenCalledTimes(1);
@@ -47,7 +50,10 @@ describe('AuthService', () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
       mockUsersService.create.mockResolvedValue(mockUser);
 
-      await service.register({ email: 'test@smartex.com', password: 'Test123!' });
+      await service.register({
+        email: 'test@smartex.com',
+        password: 'Test123!',
+      });
 
       const [, hashedPassword] = mockUsersService.create.mock.calls[0];
       expect(hashedPassword).not.toBe('Test123!');
@@ -66,9 +72,15 @@ describe('AuthService', () => {
   describe('login', () => {
     it('should login and return accessToken', async () => {
       const hashed = await bcrypt.hash('Test123!', 10);
-      mockUsersService.findByEmail.mockResolvedValue({ ...mockUser, password: hashed });
+      mockUsersService.findByEmail.mockResolvedValue({
+        ...mockUser,
+        password: hashed,
+      });
 
-      const result = await service.login({ email: 'test@smartex.com', password: 'Test123!' });
+      const result = await service.login({
+        email: 'test@smartex.com',
+        password: 'Test123!',
+      });
 
       expect(result).toHaveProperty('accessToken', 'mock-token');
     });
@@ -83,16 +95,25 @@ describe('AuthService', () => {
 
     it('should throw UnauthorizedException if password is wrong', async () => {
       const hashed = await bcrypt.hash('correct-password', 10);
-      mockUsersService.findByEmail.mockResolvedValue({ ...mockUser, password: hashed });
+      mockUsersService.findByEmail.mockResolvedValue({
+        ...mockUser,
+        password: hashed,
+      });
 
       await expect(
-        service.login({ email: 'test@smartex.com', password: 'wrong-password' }),
+        service.login({
+          email: 'test@smartex.com',
+          password: 'wrong-password',
+        }),
       ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should sign JWT with correct payload', async () => {
       const hashed = await bcrypt.hash('Test123!', 10);
-      mockUsersService.findByEmail.mockResolvedValue({ ...mockUser, password: hashed });
+      mockUsersService.findByEmail.mockResolvedValue({
+        ...mockUser,
+        password: hashed,
+      });
 
       await service.login({ email: 'test@smartex.com', password: 'Test123!' });
 

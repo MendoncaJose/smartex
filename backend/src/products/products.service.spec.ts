@@ -143,7 +143,10 @@ describe('ProductsService', () => {
     });
 
     it('should throw BadRequestException when category belongs to another user', async () => {
-      mockCategoryRepo.findOne.mockResolvedValue({ ...mockCategory, userId: 2 });
+      mockCategoryRepo.findOne.mockResolvedValue({
+        ...mockCategory,
+        userId: 2,
+      });
 
       await expect(
         service.create({ title: 'Test', price: 10, categoryIds: [1] }, 1),
@@ -154,9 +157,17 @@ describe('ProductsService', () => {
   describe('update', () => {
     it('should update title and price', async () => {
       mockProductRepo.findOne.mockResolvedValue({ ...mockProduct });
-      mockProductRepo.save.mockResolvedValue({ ...mockProduct, title: 'Updated', price: 799 });
+      mockProductRepo.save.mockResolvedValue({
+        ...mockProduct,
+        title: 'Updated',
+        price: 799,
+      });
 
-      const result = await service.update(1, { title: 'Updated', price: 799 }, 1);
+      const result = await service.update(
+        1,
+        { title: 'Updated', price: 799 },
+        1,
+      );
 
       expect(result.title).toBe('Updated');
       expect(result.price).toBe(799);
@@ -166,7 +177,10 @@ describe('ProductsService', () => {
       const newCat = { id: 2, name: 'Computers', userId: 1 };
       mockProductRepo.findOne.mockResolvedValue({ ...mockProduct });
       mockCategoryRepo.findOne.mockResolvedValue(newCat);
-      mockProductRepo.save.mockResolvedValue({ ...mockProduct, categories: [newCat] });
+      mockProductRepo.save.mockResolvedValue({
+        ...mockProduct,
+        categories: [newCat],
+      });
 
       const result = await service.update(1, { categoryIds: [2] }, 1);
 
@@ -176,13 +190,17 @@ describe('ProductsService', () => {
     it('should throw NotFoundException when updating non-existent product', async () => {
       mockProductRepo.findOne.mockResolvedValue(null);
 
-      await expect(service.update(99, { title: 'X' }, 1)).rejects.toThrow(NotFoundException);
+      await expect(service.update(99, { title: 'X' }, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw ForbiddenException when updating another user product', async () => {
       mockProductRepo.findOne.mockResolvedValue({ ...mockProduct, userId: 2 });
 
-      await expect(service.update(1, { title: 'X' }, 1)).rejects.toThrow(ForbiddenException);
+      await expect(service.update(1, { title: 'X' }, 1)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('should not mutate fields that are not provided', async () => {

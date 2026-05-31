@@ -36,7 +36,10 @@ describe('CategoriesService', () => {
       const result = await service.findAll(1);
 
       expect(result).toEqual([mockCategory]);
-      expect(mockRepo.find).toHaveBeenCalledWith({ where: { userId: 1 }, order: { name: 'ASC' } });
+      expect(mockRepo.find).toHaveBeenCalledWith({
+        where: { userId: 1 },
+        order: { name: 'ASC' },
+      });
     });
 
     it('should return empty array when user has no categories', async () => {
@@ -78,7 +81,10 @@ describe('CategoriesService', () => {
       const result = await service.create({ name: 'Electronics' }, 1);
 
       expect(result).toEqual(mockCategory);
-      expect(mockRepo.create).toHaveBeenCalledWith({ name: 'Electronics', userId: 1 });
+      expect(mockRepo.create).toHaveBeenCalledWith({
+        name: 'Electronics',
+        userId: 1,
+      });
     });
 
     it('should associate category with the authenticated user', async () => {
@@ -87,7 +93,10 @@ describe('CategoriesService', () => {
 
       await service.create({ name: 'Books' }, 5);
 
-      expect(mockRepo.create).toHaveBeenCalledWith({ name: 'Books', userId: 5 });
+      expect(mockRepo.create).toHaveBeenCalledWith({
+        name: 'Books',
+        userId: 5,
+      });
     });
   });
 
@@ -104,13 +113,17 @@ describe('CategoriesService', () => {
     it('should throw NotFoundException when updating non-existent category', async () => {
       mockRepo.findOne.mockResolvedValue(null);
 
-      await expect(service.update(99, { name: 'X' }, 1)).rejects.toThrow(NotFoundException);
+      await expect(service.update(99, { name: 'X' }, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw ForbiddenException when updating another user category', async () => {
       mockRepo.findOne.mockResolvedValue({ ...mockCategory, userId: 2 });
 
-      await expect(service.update(1, { name: 'X' }, 1)).rejects.toThrow(ForbiddenException);
+      await expect(service.update(1, { name: 'X' }, 1)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
   });
 
