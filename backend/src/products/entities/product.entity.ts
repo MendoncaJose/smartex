@@ -33,7 +33,7 @@ export class Product {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToMany(() => Category, { eager: true })
+  @ManyToMany(() => Category)
   @JoinTable({ name: 'product_categories' })
   categories: Category[];
 
