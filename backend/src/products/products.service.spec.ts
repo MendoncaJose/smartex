@@ -57,6 +57,7 @@ const mockProductRepo = {
 
 const mockCategoryRepo = {
   findOne: jest.fn(),
+  findBy: jest.fn(),
 };
 
 describe('ProductsService', () => {
@@ -142,7 +143,7 @@ describe('ProductsService', () => {
 
   describe('create', () => {
     it('should create and return a product with categories', async () => {
-      mockCategoryRepo.findOne.mockResolvedValue(mockCategory);
+      mockCategoryRepo.findBy.mockResolvedValue([mockCategory]);
       mockProductRepo.create.mockReturnValue(mockProduct);
       mockProductRepo.save.mockResolvedValue(mockProduct);
 
@@ -156,7 +157,7 @@ describe('ProductsService', () => {
     });
 
     it('should throw NotFoundException when a categoryId does not exist', async () => {
-      mockCategoryRepo.findOne.mockResolvedValue(null);
+      mockCategoryRepo.findBy.mockResolvedValue([]);
 
       await expect(
         service.create({ title: 'Test', price: 10, categoryIds: [999] }, 1),
@@ -164,10 +165,12 @@ describe('ProductsService', () => {
     });
 
     it('should throw BadRequestException when category belongs to another user', async () => {
-      mockCategoryRepo.findOne.mockResolvedValue({
-        ...mockCategory,
-        userId: 2,
-      });
+      mockCategoryRepo.findBy.mockResolvedValue([
+        {
+          ...mockCategory,
+          userId: 2,
+        },
+      ]);
 
       await expect(
         service.create({ title: 'Test', price: 10, categoryIds: [1] }, 1),
@@ -197,7 +200,7 @@ describe('ProductsService', () => {
     it('should update categories when categoryIds provided', async () => {
       const newCat = { id: 2, name: 'Computers', userId: 1 };
       mockProductRepo.findOne.mockResolvedValue({ ...mockProduct });
-      mockCategoryRepo.findOne.mockResolvedValue(newCat);
+      mockCategoryRepo.findBy.mockResolvedValue([newCat]);
       mockProductRepo.save.mockResolvedValue({
         ...mockProduct,
         categories: [newCat],

@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { Category } from '../categories/entities/category.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -113,26 +113,30 @@ export class ProductsService {
     categoryIds: number[],
     userId: number,
   ): Promise<Category[]> {
-    const categories = await Promise.all(
-      categoryIds.map((catId) =>
-        this.categoriesRepository.findOne({ where: { id: catId } }),
-      ),
+    const uniqueCategoryIds = [...new Set(categoryIds)];
+    const categories = await this.categoriesRepository.findBy({
+      id: In(uniqueCategoryIds),
+    });
+    const categoriesById = new Map(
+      categories.map((category) => [category.id, category]),
     );
 
-    const missing = categoryIds.filter((_, i) => !categories[i]);
+    const missing = uniqueCategoryIds.filter((id) => !categoriesById.has(id));
     if (missing.length) {
       throw new NotFoundException(
         `Categories not found: ${missing.join(', ')}`,
       );
     }
 
-    const forbidden = categories.filter((c) => c!.userId !== userId);
+    const forbidden = categories.filter(
+      (category) => category.userId !== userId,
+    );
     if (forbidden.length) {
       throw new BadRequestException(
         'One or more categories do not belong to you',
       );
     }
 
-    return categories as Category[];
+    return categoryIds.map((id) => categoriesById.get(id)!);
   }
 }
