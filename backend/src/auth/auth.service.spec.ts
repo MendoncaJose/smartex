@@ -7,9 +7,14 @@ import { UsersService } from '../users/users.service';
 
 const mockUser = { id: 1, email: 'test@smartex.com', password: 'hashed' };
 
-const mockUsersService = {
-  findByEmail: jest.fn(),
-  create: jest.fn(),
+type MockUsersService = {
+  findByEmail: jest.Mock<Promise<typeof mockUser | null>, [string]>;
+  create: jest.Mock<Promise<typeof mockUser>, [string, string]>;
+};
+
+const mockUsersService: MockUsersService = {
+  findByEmail: jest.fn<Promise<typeof mockUser | null>, [string]>(),
+  create: jest.fn<Promise<typeof mockUser>, [string, string]>(),
 };
 
 const mockJwtService = {
@@ -55,7 +60,7 @@ describe('AuthService', () => {
         password: 'Test123!',
       });
 
-      const [, hashedPassword] = mockUsersService.create.mock.calls[0];
+      const hashedPassword = mockUsersService.create.mock.calls[0][1];
       expect(hashedPassword).not.toBe('Test123!');
       expect(await bcrypt.compare('Test123!', hashedPassword)).toBe(true);
     });

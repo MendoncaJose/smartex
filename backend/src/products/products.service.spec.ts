@@ -19,14 +19,32 @@ const mockProduct = {
   categories: [mockCategory],
 };
 
-const mockQueryBuilder: any = {
+type MockQueryBuilder = {
+  leftJoinAndSelect: jest.MockedFunction<
+    (relation: string, alias: string) => MockQueryBuilder
+  >;
+  where: jest.MockedFunction<
+    (condition: string, parameters: Record<string, unknown>) => MockQueryBuilder
+  >;
+  andWhere: jest.MockedFunction<
+    (condition: string, parameters: Record<string, unknown>) => MockQueryBuilder
+  >;
+  orderBy: jest.MockedFunction<
+    (sort: string, order: 'ASC' | 'DESC') => MockQueryBuilder
+  >;
+  skip: jest.MockedFunction<(skip: number) => MockQueryBuilder>;
+  take: jest.MockedFunction<(take: number) => MockQueryBuilder>;
+  getManyAndCount: jest.MockedFunction<() => Promise<[Product[], number]>>;
+};
+
+const mockQueryBuilder: MockQueryBuilder = {
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   skip: jest.fn().mockReturnThis(),
   take: jest.fn().mockReturnThis(),
-  getManyAndCount: jest.fn().mockResolvedValue([[mockProduct], 1]),
+  getManyAndCount: jest.fn().mockResolvedValue([[mockProduct as Product], 1]),
 };
 
 const mockProductRepo = {
@@ -56,7 +74,10 @@ describe('ProductsService', () => {
     service = module.get<ProductsService>(ProductsService);
     jest.clearAllMocks();
     mockProductRepo.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-    mockQueryBuilder.getManyAndCount.mockResolvedValue([[mockProduct], 1]);
+    mockQueryBuilder.getManyAndCount.mockResolvedValue([
+      [mockProduct as Product],
+      1,
+    ]);
   });
 
   describe('findAll', () => {
@@ -206,7 +227,9 @@ describe('ProductsService', () => {
     it('should not mutate fields that are not provided', async () => {
       const original = { ...mockProduct, description: 'original desc' };
       mockProductRepo.findOne.mockResolvedValue(original);
-      mockProductRepo.save.mockImplementation(async (p) => p);
+      mockProductRepo.save.mockImplementation((p: Product) =>
+        Promise.resolve(p),
+      );
 
       const result = await service.update(1, { title: 'New title' }, 1);
 
