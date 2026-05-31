@@ -1,4 +1,5 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
@@ -21,8 +22,10 @@ const TOKEN_KEY = 'smartex_token';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  private readonly token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
+  private readonly token = signal<string | null>(this.readStoredToken());
 
   readonly isAuthenticated = computed(() => {
     const t = this.token();
@@ -64,17 +67,25 @@ export class AuthService {
 
   logout() {
     this.token.set(null);
-    localStorage.removeItem(TOKEN_KEY);
+    if (this.isBrowser) {
+      localStorage.removeItem(TOKEN_KEY);
+    }
     this.router.navigate(['/login']);
   }
 
   private setToken(token: string) {
-    localStorage.setItem(TOKEN_KEY, token);
+    if (this.isBrowser) {
+      localStorage.setItem(TOKEN_KEY, token);
+    }
     this.token.set(token);
+  }
+
+  private readStoredToken(): string | null {
+    return this.isBrowser ? localStorage.getItem(TOKEN_KEY) : null;
   }
 
   private decodeToken(token: string): JwtPayload {
     const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
+    return JSON.parse(atob(payload)) as JwtPayload;
   }
 }
