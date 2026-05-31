@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,6 +36,7 @@ export class LoginComponent {
   });
 
   submit() {
+    this.form.markAllAsTouched();
     if (this.form.invalid || this.loading()) return;
 
     const { email, password } = this.form.getRawValue();
@@ -45,8 +47,10 @@ export class LoginComponent {
         this.toast.success('Welcome back!');
         this.router.navigate(['/products']);
       },
-      error: () => {
-        this.toast.error('Invalid email or password');
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 0) {
+          this.toast.error('Invalid email or password');
+        }
         this.loading.set(false);
       },
     });

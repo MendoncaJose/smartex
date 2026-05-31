@@ -27,7 +27,7 @@
       <button
         mat-flat-button
         type="submit"
-        [disabled]="form.invalid || loading()"
+        [disabled]="loading()"
         class="auth-submit"
       >
         @if (loading()) {

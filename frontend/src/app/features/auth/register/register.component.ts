@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +43,7 @@ export class RegisterComponent {
   });
 
   submit() {
+    this.form.markAllAsTouched();
     if (this.form.invalid || this.loading()) return;
 
     const { email, password } = this.form.getRawValue();
@@ -52,9 +54,11 @@ export class RegisterComponent {
         this.toast.success('Account created successfully!');
         this.router.navigate(['/products']);
       },
-      error: (err) => {
-        const msg = err.error?.message ?? 'Registration failed';
-        this.toast.error(Array.isArray(msg) ? msg[0] : msg);
+      error: (err: HttpErrorResponse) => {
+        if (err.status !== 0) {
+          const msg = err.error?.message ?? 'Registration failed';
+          this.toast.error(Array.isArray(msg) ? msg[0] : msg);
+        }
         this.loading.set(false);
       },
     });
