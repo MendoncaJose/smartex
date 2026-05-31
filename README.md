@@ -58,6 +58,7 @@ DB_PASSWORD=admin
 DB_NAME=smartex
 JWT_SECRET=change-me
 JWT_EXPIRES_IN=1h
+CORS_ORIGIN=http://localhost:4200
 ```
 
 ### 3. Frontend
