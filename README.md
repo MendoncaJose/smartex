@@ -15,16 +15,16 @@ Product catalog SaaS built with Angular 21, NestJS, PostgreSQL and Docker.
 ## Features
 
 - Register / login with JWT authentication
-- Products — create, edit, delete, search, filter by category, pagination (12/24/48)
-- Categories — create, edit, delete, search
+- Products: create, edit, delete, search, filter by category, pagination (12/24/48)
+- Categories: create, edit, delete, search
 - Products linked to one or more categories (many-to-many)
-- Per-user isolation — each user sees only their own data
+- Per-user isolation: each user sees only their own data
 
 ## Prerequisites
 
 - Node.js 20+
+- npm 11+
 - Docker Desktop
-- Angular CLI 21 (`npm install -g @angular/cli`)
 
 ## Setup & Run
 
@@ -39,6 +39,7 @@ docker-compose up -d
 ```bash
 cd backend
 npm install
+copy .env.example .env
 npm run migration:run
 npm run seed
 npm run start:dev
@@ -46,12 +47,25 @@ npm run start:dev
 
 API available at `http://localhost:3000`
 
+Default backend environment:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=5434
+DB_USER=admin
+DB_PASSWORD=admin
+DB_NAME=smartex
+JWT_SECRET=change-me
+JWT_EXPIRES_IN=1h
+```
+
 ### 3. Frontend
 
 ```bash
 cd frontend
 npm install
-ng serve
+npm run start
 ```
 
 App available at `http://localhost:4200`
@@ -69,7 +83,7 @@ The seed also creates 12 categories and 52 products linked to the admin account.
 
 All routes except `/auth/*` require `Authorization: Bearer <token>`.
 
-```
+```http
 POST   /auth/register
 POST   /auth/login
 
@@ -88,10 +102,21 @@ PATCH  /products/:id
 DELETE /products/:id
 ```
 
-## Tests
+## Verification
+
+Backend:
 
 ```bash
 cd backend
-npm run test        # 37 unit tests
+npm run test        # 38 unit tests
 npm run test:cov    # coverage report
+npm run lint        # backend lint
+npm run build       # backend production build
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run build       # frontend production build
 ```
