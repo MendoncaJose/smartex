@@ -12,7 +12,7 @@ import { Product } from '../../../core/models/product.model';
 import { Category } from '../../../core/models/category.model';
 
 @Component({
-  selector: 'app-product-form',
+  selector: 'app-product-drawer',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -22,10 +22,10 @@ import { Category } from '../../../core/models/category.model';
     MatIconModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss',
+  templateUrl: './product-drawer.component.html',
+  styleUrl: './product-drawer.component.scss',
 })
-export class ProductFormComponent {
+export class ProductDrawerComponent {
   private readonly productsService = inject(ProductsService);
   private readonly toast = inject(ToastService);
   private readonly fb = inject(FormBuilder);
@@ -90,6 +90,9 @@ export class ProductFormComponent {
       next: () => {
         this.toast.success(this.isEdit ? 'Product updated' : 'Product created');
         this.loading.set(false);
+        this.form.reset({ title: '', description: '', price: 0, categoryIds: [] });
+        this.form.markAsUntouched();
+        this.form.markAsPristine();
         this.saved.emit();
       },
       error: () => {

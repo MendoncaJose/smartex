@@ -11,7 +11,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ProductCardComponent } from '../product-card/product-card.component';
-import { ProductFormComponent } from '../product-form/product-form.component';
+import { ProductDrawerComponent } from '../product-drawer/product-drawer.component';
 import { ProductsService } from '../../../core/services/products.service';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -33,7 +33,7 @@ import { Category } from '../../../core/models/category.model';
     MatDialogModule,
     MatSidenavModule,
     ProductCardComponent,
-    ProductFormComponent,
+    ProductDrawerComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',

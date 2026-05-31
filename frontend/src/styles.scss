@@ -171,6 +171,12 @@ h3 {
   letter-spacing: -0.02em;
 }
 
+// ── Mat drawer (mode=over only) — width + no border-radius ───────────────────
+.mat-drawer-over {
+  width: min(520px, 100vw) !important;
+  border-radius: 0 !important;
+}
+
 // ── Toast notifications ───────────────────────────────────────────────────────
 .toast-container .ngx-toastr {
   width: 340px !important;

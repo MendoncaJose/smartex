@@ -10,7 +10,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { Category } from '../../../core/models/category.model';
 
 @Component({
-  selector: 'app-category-form',
+  selector: 'app-category-drawer',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -19,10 +19,10 @@ import { Category } from '../../../core/models/category.model';
     MatIconModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './category-form.component.html',
-  styleUrl: './category-form.component.scss',
+  templateUrl: './category-drawer.component.html',
+  styleUrl: './category-drawer.component.scss',
 })
-export class CategoryFormComponent {
+export class CategoryDrawerComponent {
   private readonly categoriesService = inject(CategoriesService);
   private readonly toast = inject(ToastService);
   private readonly fb = inject(FormBuilder);
@@ -65,6 +65,9 @@ export class CategoryFormComponent {
       next: () => {
         this.toast.success(this.isEdit ? 'Category updated' : 'Category created');
         this.loading.set(false);
+        this.form.reset({ name: '' });
+        this.form.markAsUntouched();
+        this.form.markAsPristine();
         this.saved.emit();
       },
       error: () => {

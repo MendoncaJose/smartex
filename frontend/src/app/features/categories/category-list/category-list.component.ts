@@ -14,7 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
-import { CategoryFormComponent } from '../category-form/category-form.component';
+import { CategoryDrawerComponent } from '../category-drawer/category-drawer.component';
 import { Category } from '../../../core/models/category.model';
 
 @Component({
@@ -32,7 +32,7 @@ import { Category } from '../../../core/models/category.model';
     MatDialogModule,
     MatTooltipModule,
     MatSidenavModule,
-    CategoryFormComponent,
+    CategoryDrawerComponent,
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',

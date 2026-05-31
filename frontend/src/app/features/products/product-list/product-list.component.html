@@ -1,7 +1,7 @@
 <mat-drawer-container class="drawer-container" autosize>
 
   <mat-drawer position="end" mode="over" [opened]="drawerOpen()" (closedStart)="drawerOpen.set(false)">
-    <app-product-form
+    <app-product-drawer
       [product]="editingProduct()"
       [categories]="categories()"
       (saved)="onSaved()"
