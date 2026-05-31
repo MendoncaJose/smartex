@@ -127,6 +127,7 @@ export class ProductListComponent implements OnInit {
   loadCategories() {
     this.categoriesService.getAll().subscribe({
       next: (cats) => this.categories.set(cats),
+      error: () => this.toast.error('Category filters could not be loaded'),
     });
   }
 
