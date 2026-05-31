@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, input, output } from '@angular/core';
+import { Component, inject, signal, effect, input, output, untracked } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -48,19 +48,21 @@ export class ProductDrawerComponent {
 
   constructor() {
     effect(() => {
-      const p = this.product();
-      if (p) {
-        this.form.patchValue({
-          title: p.title,
-          description: p.description ?? '',
-          price: p.price,
-          categoryIds: p.categories.map((c) => c.id),
-        });
-      } else {
-        this.form.reset({ title: '', description: '', price: 0, categoryIds: [] });
-      }
-      this.form.markAsUntouched();
-      this.form.markAsPristine();
+      const products = this.product();
+      untracked(() => {
+        if (products) {
+          this.form.patchValue({
+            title: products.title,
+            description: products.description ?? '',
+            price: products.price,
+            categoryIds: products.categories.map((category) => category.id),
+          });
+        } else {
+          this.form.reset({ title: '', description: '', price: 0, categoryIds: [] });
+        }
+        this.form.markAsUntouched();
+        this.form.markAsPristine();
+      });
     });
   }
 

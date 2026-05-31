@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, input, output } from '@angular/core';
+import { Component, inject, signal, effect, input, output, untracked } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -40,9 +40,11 @@ export class CategoryDrawerComponent {
   constructor() {
     effect(() => {
       const c = this.category();
-      this.form.reset({ name: c?.name ?? '' });
-      this.form.markAsUntouched();
-      this.form.markAsPristine();
+      untracked(() => {
+        this.form.reset({ name: c?.name ?? '' });
+        this.form.markAsUntouched();
+        this.form.markAsPristine();
+      });
     });
   }
 
