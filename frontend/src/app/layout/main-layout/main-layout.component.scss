@@ -32,7 +32,7 @@ $sidebar-collapsed-width: 64px;
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--c-sidebar-accent);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 }
 
@@ -88,6 +88,11 @@ $sidebar-collapsed-width: 64px;
   &.active {
     background: rgba(255, 255, 255, 0.10);
     color: var(--c-sidebar-text-active);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--c-sidebar-accent);
+    outline-offset: -2px;
   }
 }
 
