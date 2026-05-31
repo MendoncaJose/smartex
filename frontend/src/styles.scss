@@ -45,27 +45,75 @@ html {
     )
   );
 
-  // Override Material system variables with botanical tokens
-  --mat-sys-primary:               var(--c-primary);
-  --mat-sys-on-primary:            var(--c-on-primary);
-  --mat-sys-primary-container:     var(--c-primary-container);
-  --mat-sys-on-primary-container:  var(--c-on-primary-container);
-  --mat-sys-secondary-container:   var(--c-primary-container);
+  // Color overrides
+  --mat-sys-primary:                var(--c-primary);
+  --mat-sys-on-primary:             var(--c-on-primary);
+  --mat-sys-primary-container:      var(--c-primary-container);
+  --mat-sys-on-primary-container:   var(--c-on-primary-container);
+  --mat-sys-secondary-container:    var(--c-primary-container);
   --mat-sys-on-secondary-container: var(--c-on-primary-container);
-  --mat-sys-surface:               var(--c-surface);
-  --mat-sys-surface-variant:       var(--c-surface-variant);
-  --mat-sys-on-surface:            var(--c-ink);
-  --mat-sys-on-surface-variant:    var(--c-muted);
-  --mat-sys-outline:               var(--c-outline);
-  --mat-sys-outline-variant:       var(--c-outline-variant);
-  --mat-sys-error:                 var(--c-error);
-  --mat-sys-on-error:              var(--c-on-primary);
-  --mat-sys-body-medium-size:      1rem;
-  --mat-sys-body-font:             'DM Sans', system-ui, sans-serif;
-  --mat-sys-label-font:            'DM Sans', system-ui, sans-serif;
-  --mat-sys-title-font:            'DM Sans', system-ui, sans-serif;
-  --mat-sys-headline-font:         'DM Sans', system-ui, sans-serif;
-  --mat-sys-display-font:          'DM Sans', system-ui, sans-serif;
+  --mat-sys-surface:                var(--c-surface);
+  --mat-sys-surface-variant:        var(--c-surface-variant);
+  --mat-sys-on-surface:             var(--c-ink);
+  --mat-sys-on-surface-variant:     var(--c-muted);
+  --mat-sys-outline:                var(--c-outline);
+  --mat-sys-outline-variant:        var(--c-outline-variant);
+  --mat-sys-error:                  var(--c-error);
+  --mat-sys-on-error:               var(--c-on-primary);
+
+  // Font family — all roles
+  --mat-sys-body-font:     'DM Sans', system-ui, sans-serif;
+  --mat-sys-label-font:    'DM Sans', system-ui, sans-serif;
+  --mat-sys-title-font:    'DM Sans', system-ui, sans-serif;
+  --mat-sys-headline-font: 'DM Sans', system-ui, sans-serif;
+  --mat-sys-display-font:  'DM Sans', system-ui, sans-serif;
+
+  // Type scale — body
+  --mat-sys-body-large-size:        1rem;
+  --mat-sys-body-large-line-height: 1.5rem;
+  --mat-sys-body-large-weight:      400;
+  --mat-sys-body-large-tracking:    0;
+  --mat-sys-body-medium-size:       1rem;
+  --mat-sys-body-medium-line-height: 1.5rem;
+  --mat-sys-body-medium-weight:     400;
+  --mat-sys-body-medium-tracking:   0;
+
+  // Type scale — label (buttons, form labels, table headers, nav)
+  --mat-sys-label-large-size:        0.875rem;
+  --mat-sys-label-large-line-height: 1.25rem;
+  --mat-sys-label-large-weight:      500;
+  --mat-sys-label-large-tracking:    0;
+  --mat-sys-label-medium-size:       0.875rem;
+  --mat-sys-label-medium-line-height: 1.25rem;
+  --mat-sys-label-medium-weight:     500;
+  --mat-sys-label-medium-tracking:   0;
+  --mat-sys-label-small-size:        0.75rem;
+  --mat-sys-label-small-line-height: 1rem;
+  --mat-sys-label-small-weight:      400;
+
+  // Type scale — title (card titles, dialog titles, drawer titles)
+  --mat-sys-title-large-size:        1.25rem;
+  --mat-sys-title-large-line-height: 1.75rem;
+  --mat-sys-title-large-weight:      600;
+  --mat-sys-title-large-tracking:    -0.02em;
+  --mat-sys-title-medium-size:       1rem;
+  --mat-sys-title-medium-line-height: 1.5rem;
+  --mat-sys-title-medium-weight:     600;
+  --mat-sys-title-medium-tracking:   0;
+  --mat-sys-title-small-size:        0.875rem;
+  --mat-sys-title-small-line-height: 1.25rem;
+  --mat-sys-title-small-weight:      500;
+  --mat-sys-title-small-tracking:    0;
+
+  // Type scale — headline
+  --mat-sys-headline-medium-size:        1.5rem;
+  --mat-sys-headline-medium-line-height: 2rem;
+  --mat-sys-headline-medium-weight:      600;
+  --mat-sys-headline-medium-tracking:    -0.02em;
+  --mat-sys-headline-small-size:         1.25rem;
+  --mat-sys-headline-small-line-height:  1.75rem;
+  --mat-sys-headline-small-weight:       600;
+  --mat-sys-headline-small-tracking:     -0.02em;
 }
 
 body {
@@ -81,6 +129,34 @@ body {
 
 * { box-sizing: border-box; }
 
+// ── Global heading baseline ───────────────────────────────────────────────────
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--c-ink);
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
 // ── Toast notifications ───────────────────────────────────────────────────────
 .toast-container .ngx-toastr {
   width: 380px !important;
@@ -95,13 +171,13 @@ body {
 
   .toast-title {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     margin-bottom: 2px;
   }
 
   .toast-message {
     color: var(--c-muted);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
   }
 
   .toast-close-button {
