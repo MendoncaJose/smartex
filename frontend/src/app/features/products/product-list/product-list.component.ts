@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,8 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { ProductFormComponent } from '../product-form/product-form.component';
 import { ProductsService } from '../../../core/services/products.service';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -29,7 +31,9 @@ import { Category } from '../../../core/models/category.model';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatSidenavModule,
     ProductCardComponent,
+    ProductFormComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
@@ -117,6 +121,11 @@ export class ProductListComponent implements OnInit {
   openEdit(product: Product) {
     this.editingProduct.set(product);
     this.drawerOpen.set(true);
+  }
+
+  onSaved() {
+    this.drawerOpen.set(false);
+    this.loadProducts();
   }
 
   confirmDelete(product: Product) {

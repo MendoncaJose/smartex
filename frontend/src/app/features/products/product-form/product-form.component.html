@@ -1,0 +1,63 @@
+<div class="form-drawer">
+
+  <div class="drawer-header">
+    <h2 class="drawer-title">{{ isEdit ? 'Edit product' : 'New product' }}</h2>
+    <button mat-icon-button type="button" (click)="cancelled.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+    <form [formGroup]="form">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Product title" />
+        @if (form.controls.title.touched && form.controls.title.invalid) {
+          <mat-error>Title is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Price (€)</mat-label>
+        <input matInput type="number" formControlName="price" min="0" step="0.01" />
+        @if (form.controls.price.hasError('min')) {
+          <mat-error>Price must be 0 or higher</mat-error>
+        }
+        @if (form.controls.price.hasError('required')) {
+          <mat-error>Price is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4" placeholder="Optional description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Categories</mat-label>
+        <mat-select formControlName="categoryIds" multiple>
+          @for (cat of categories(); track cat.id) {
+            <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.categoryIds.touched && form.controls.categoryIds.hasError('required')) {
+          <mat-error>Select at least one category</mat-error>
+        }
+      </mat-form-field>
+
+    </form>
+  </div>
+
+  <div class="drawer-footer">
+    <button mat-button type="button" (click)="cancelled.emit()">Cancel</button>
+    <button mat-flat-button type="button" [disabled]="loading()" (click)="submit()">
+      @if (loading()) {
+        <mat-spinner diameter="18" />
+      } @else {
+        {{ isEdit ? 'Update' : 'Create' }}
+      }
+    </button>
+  </div>
+
+</div>
