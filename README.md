@@ -85,6 +85,8 @@ The seed also creates 12 categories and 52 products linked to the admin account.
 All routes except `/auth/*` require `Authorization: Bearer <token>`.
 
 ```http
+GET    /health
+
 POST   /auth/register
 POST   /auth/login
 
