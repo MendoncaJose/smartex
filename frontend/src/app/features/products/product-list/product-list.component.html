@@ -1,0 +1,65 @@
+<div class="page-container">
+
+  <!-- Toolbar -->
+  <div class="page-toolbar">
+    <h1 class="page-title">Products</h1>
+
+    <div class="toolbar-actions">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [formControl]="searchControl" placeholder="Search products..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="category-field">
+        <mat-label>Category</mat-label>
+        <mat-select [formControl]="categoryControl">
+          <mat-option [value]="null">All categories</mat-option>
+          @for (cat of categories(); track cat.id) {
+            <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        New product
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (products().length === 0) {
+    <div class="empty-state">
+      <mat-icon>inventory_2</mat-icon>
+      <p>No products found</p>
+    </div>
+  } @else {
+    <div class="products-grid">
+      @for (product of products(); track product.id) {
+        <app-product-card
+          [product]="product"
+          (edit)="openEdit($event)"
+          (delete)="confirmDelete($event)"
+        />
+      }
+    </div>
+  }
+
+  <!-- Paginator -->
+  @if (total() > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageIndex]="page()"
+      [pageSize]="limit()"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    />
+  }
+
+</div>

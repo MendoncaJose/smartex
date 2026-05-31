@@ -1,0 +1,26 @@
+<mat-card class="product-card">
+  <mat-card-header>
+    <mat-card-title>{{ product().title }}</mat-card-title>
+    <mat-card-subtitle>{{ product().price | currency:'EUR' }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (product().description) {
+      <p class="description">{{ product().description }}</p>
+    }
+    <div class="chips">
+      @for (cat of product().categories; track cat.id) {
+        <mat-chip>{{ cat.name }}</mat-chip>
+      }
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-icon-button matTooltip="Edit" (click)="edit.emit(product())">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Delete" color="warn" (click)="delete.emit(product())">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
