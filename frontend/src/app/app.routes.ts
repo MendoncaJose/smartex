@@ -5,31 +5,37 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+      import('./features/auth/login/login.component').then(
+        (routeModule) => routeModule.LoginComponent,
+      ),
   },
   {
     path: 'register',
     loadComponent: () =>
-      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+      import('./features/auth/register/register.component').then(
+        (routeModule) => routeModule.RegisterComponent,
+      ),
   },
   {
     path: '',
     loadComponent: () =>
-      import('./layout/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
+      import('./layout/main-layout/main-layout.component').then(
+        (routeModule) => routeModule.MainLayoutComponent,
+      ),
     canActivate: [authGuard],
     children: [
       {
         path: 'products',
         loadComponent: () =>
           import('./features/products/product-list/product-list.component').then(
-            (m) => m.ProductListComponent,
+            (routeModule) => routeModule.ProductListComponent,
           ),
       },
       {
         path: 'categories',
         loadComponent: () =>
           import('./features/categories/category-list/category-list.component').then(
-            (m) => m.CategoryListComponent,
+            (routeModule) => routeModule.CategoryListComponent,
           ),
       },
       { path: '', redirectTo: 'products', pathMatch: 'full' },

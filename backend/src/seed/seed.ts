@@ -383,24 +383,26 @@ async function seed() {
   }
 
   // Products
-  for (const p of PRODUCTS) {
+  for (const productSeed of PRODUCTS) {
     const exists = await productRepo.findOne({
-      where: { title: p.title, userId: admin.id },
+      where: { title: productSeed.title, userId: admin.id },
     });
     if (exists) {
-      console.log(`Product already exists: ${p.title}`);
+      console.log(`Product already exists: ${productSeed.title}`);
       continue;
     }
-    const categories = p.categories.map((name) => categoryMap.get(name)!);
+    const categories = productSeed.categories.map(
+      (categorySeedName) => categoryMap.get(categorySeedName)!,
+    );
     const product = productRepo.create({
-      title: p.title,
-      description: p.description,
-      price: p.price,
+      title: productSeed.title,
+      description: productSeed.description,
+      price: productSeed.price,
       userId: admin.id,
       categories,
     });
     await productRepo.save(product);
-    console.log(`Product created: ${p.title}`);
+    console.log(`Product created: ${productSeed.title}`);
   }
 
   console.log('\nSeed complete.');

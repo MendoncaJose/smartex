@@ -39,9 +39,9 @@ export class CategoryDrawerComponent {
 
   constructor() {
     effect(() => {
-      const c = this.category();
+      const selectedCategory = this.category();
       untracked(() => {
-        this.form.reset({ name: c?.name ?? '' });
+        this.form.reset({ name: selectedCategory?.name ?? '' });
         this.form.markAsUntouched();
         this.form.markAsPristine();
       });

@@ -28,10 +28,10 @@ export class AuthService {
   private readonly token = signal<string | null>(this.readStoredToken());
 
   readonly isAuthenticated = computed(() => {
-    const t = this.token();
-    if (!t) return false;
+    const token = this.token();
+    if (!token) return false;
     try {
-      const payload = this.decodeToken(t);
+      const payload = this.decodeToken(token);
       return payload.exp * 1000 > Date.now();
     } catch {
       return false;
@@ -39,10 +39,10 @@ export class AuthService {
   });
 
   readonly currentUser = computed<User | null>(() => {
-    const t = this.token();
-    if (!t || !this.isAuthenticated()) return null;
+    const token = this.token();
+    if (!token || !this.isAuthenticated()) return null;
     try {
-      const payload = this.decodeToken(t);
+      const payload = this.decodeToken(token);
       return { id: payload.sub, email: payload.email };
     } catch {
       return null;

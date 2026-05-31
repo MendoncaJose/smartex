@@ -60,7 +60,9 @@ export class CategoryListComponent implements OnInit {
   readonly filtered = computed(() => {
     const term = this.searchTerm().toLowerCase();
     return term
-      ? this.categories().filter((c) => c.name.toLowerCase().includes(term))
+      ? this.categories().filter((category) =>
+          category.name.toLowerCase().includes(term),
+        )
       : this.categories();
   });
 
