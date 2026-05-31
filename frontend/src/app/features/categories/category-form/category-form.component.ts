@@ -1,0 +1,76 @@
+import { Component, inject, signal, effect, input, output } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CategoriesService } from '../../../core/services/categories.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { Category } from '../../../core/models/category.model';
+
+@Component({
+  selector: 'app-category-form',
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ],
+  templateUrl: './category-form.component.html',
+  styleUrl: './category-form.component.scss',
+})
+export class CategoryFormComponent {
+  private readonly categoriesService = inject(CategoriesService);
+  private readonly toast = inject(ToastService);
+  private readonly fb = inject(FormBuilder);
+
+  readonly category = input<Category | null>(null);
+  readonly saved = output<void>();
+  readonly cancelled = output<void>();
+
+  readonly loading = signal(false);
+
+  readonly form = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(1)]],
+  });
+
+  constructor() {
+    effect(() => {
+      const c = this.category();
+      this.form.reset({ name: c?.name ?? '' });
+      this.form.markAsUntouched();
+      this.form.markAsPristine();
+    });
+  }
+
+  get isEdit(): boolean {
+    return this.category() !== null;
+  }
+
+  submit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
+
+    const { name } = this.form.getRawValue();
+    this.loading.set(true);
+
+    const obs = this.isEdit
+      ? this.categoriesService.update(this.category()!.id, { name: name! })
+      : this.categoriesService.create({ name: name! });
+
+    obs.subscribe({
+      next: () => {
+        this.toast.success(this.isEdit ? 'Category updated' : 'Category created');
+        this.loading.set(false);
+        this.saved.emit();
+      },
+      error: () => {
+        this.toast.error(this.isEdit ? 'Failed to update category' : 'Failed to create category');
+        this.loading.set(false);
+      },
+    });
+  }
+}

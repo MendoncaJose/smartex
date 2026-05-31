@@ -1,4 +1,4 @@
-﻿import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CategoriesService } from '../../../core/services/categories.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { DeleteDialogComponent } from '../../../shared/components/delete-dialog/delete-dialog.component';
+import { CategoryFormComponent } from '../category-form/category-form.component';
 import { Category } from '../../../core/models/category.model';
 
 @Component({
@@ -29,6 +31,8 @@ import { Category } from '../../../core/models/category.model';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatTooltipModule,
+    MatSidenavModule,
+    CategoryFormComponent,
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
@@ -111,4 +115,3 @@ export class CategoryListComponent implements OnInit {
     });
   }
 }
-
