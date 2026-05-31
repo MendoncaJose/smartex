@@ -72,7 +72,6 @@ export class ProductDrawerComponent {
   }
 
   cancel(): void {
-    if (this.form.dirty && !confirm('Discard unsaved changes?')) return;
     this.cancelled.emit();
   }
 

@@ -54,7 +54,6 @@ export class CategoryDrawerComponent {
   }
 
   cancel(): void {
-    if (this.form.dirty && !confirm('Discard unsaved changes?')) return;
     this.cancelled.emit();
   }
 
