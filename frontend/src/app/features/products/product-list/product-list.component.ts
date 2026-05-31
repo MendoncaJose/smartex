@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, signal, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +10,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { EMPTY, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductDrawerComponent } from '../product-drawer/product-drawer.component';
 import { ProductsService } from '../../../core/services/products.service';
@@ -44,6 +45,8 @@ export class ProductListComponent implements OnInit {
   private readonly categoriesService = inject(CategoriesService);
   private readonly toast = inject(ToastService);
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly reloadProducts$ = new Subject<void>();
 
   readonly products = signal<Product[]>([]);
   readonly categories = signal<Category[]>([]);
@@ -63,17 +66,22 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit() {
     this.loadCategories();
+    this.bindProductReload();
     this.loadProducts();
 
     this.searchControl.valueChanges
-      .pipe(debounceTime(350), distinctUntilChanged(), takeUntilDestroyed())
+      .pipe(
+        debounceTime(350),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(() => {
         this.page.set(0);
         this.loadProducts();
       });
 
     this.categoryControl.valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.page.set(0);
         this.loadProducts();
@@ -81,27 +89,38 @@ export class ProductListComponent implements OnInit {
   }
 
   loadProducts() {
-    this.loading.set(true);
-    const search = this.searchControl.value ?? '';
-    const categoryId = this.categoryControl.value ?? undefined;
+    this.reloadProducts$.next();
+  }
 
-    this.productsService
-      .getAll({
-        page: this.page() + 1,
-        limit: this.limit(),
-        search: search || undefined,
-        categoryId,
-      })
-      .subscribe({
-        next: (res) => {
-          this.products.set(res.data);
-          this.total.set(res.total);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.toast.error('Failed to load products');
-          this.loading.set(false);
-        },
+  private bindProductReload() {
+    this.reloadProducts$
+      .pipe(
+        switchMap(() => {
+          this.loading.set(true);
+          const search = this.searchControl.value ?? '';
+          const categoryId = this.categoryControl.value ?? undefined;
+
+          return this.productsService
+            .getAll({
+              page: this.page() + 1,
+              limit: this.limit(),
+              search: search || undefined,
+              categoryId,
+            })
+            .pipe(
+              catchError(() => {
+                this.toast.error('Failed to load products');
+                this.loading.set(false);
+                return EMPTY;
+              }),
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((res) => {
+        this.products.set(res.data);
+        this.total.set(res.total);
+        this.loading.set(false);
       });
   }
 
