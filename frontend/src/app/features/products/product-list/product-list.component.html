@@ -46,8 +46,15 @@
       </div>
     } @else if (products().length === 0) {
       <div class="empty-state">
-        <mat-icon>inventory_2</mat-icon>
-        <p>No products found</p>
+        @if (!searchControl.value && !categoryControl.value) {
+          <mat-icon>inventory_2</mat-icon>
+          <p>No products yet. Add your first one.</p>
+          <button mat-flat-button (click)="openCreate()">Add product</button>
+        } @else {
+          <mat-icon>search_off</mat-icon>
+          <p>No products match your filters.</p>
+          <button mat-button (click)="clearFilters()">Clear filters</button>
+        }
       </div>
     } @else {
       <div class="products-grid">

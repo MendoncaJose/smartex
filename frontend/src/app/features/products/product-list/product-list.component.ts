@@ -149,4 +149,9 @@ export class ProductListComponent implements OnInit {
   clearCategory() {
     this.categoryControl.setValue(null);
   }
+
+  clearFilters() {
+    this.searchControl.setValue('');
+    this.categoryControl.setValue(null);
+  }
 }

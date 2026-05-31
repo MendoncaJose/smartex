@@ -35,8 +35,14 @@
       </div>
     } @else if (filtered().length === 0) {
       <div class="empty-state">
-        <mat-icon>category</mat-icon>
-        <p>{{ categories().length === 0 ? 'No categories yet' : 'No results for "' + searchControl.value + '"' }}</p>
+        @if (categories().length === 0) {
+          <mat-icon>category</mat-icon>
+          <p>No categories yet. Add your first one.</p>
+          <button mat-flat-button (click)="openCreate()">Add category</button>
+        } @else {
+          <mat-icon>search_off</mat-icon>
+          <p>No categories match "{{ searchControl.value }}".</p>
+        }
       </div>
     } @else {
       <div class="table-wrapper">

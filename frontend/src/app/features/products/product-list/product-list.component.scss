@@ -61,7 +61,7 @@
   align-items: center;
   justify-content: center;
   min-height: 300px;
-  gap: 16px;
+  gap: 12px;
   color: var(--c-muted);
 
   mat-icon {
@@ -79,4 +79,7 @@
 
 mat-paginator {
   background: transparent;
+  --mat-paginator-container-text-color: var(--c-muted);
+  --mat-paginator-select-trigger-text-size: 0.875rem;
+  font-family: 'DM Sans', system-ui, sans-serif;
 }
