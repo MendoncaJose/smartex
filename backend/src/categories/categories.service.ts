@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -37,11 +38,13 @@ export class CategoriesService {
     categoryData: CreateCategoryDto,
     userId: number,
   ): Promise<Category> {
+    await this.ensureNameIsAvailable(categoryData.name, userId);
+
     const category = this.categoriesRepository.create({
       ...categoryData,
       userId,
     });
-    const savedCategory = await this.categoriesRepository.save(category);
+    const savedCategory = await this.saveCategory(category);
     this.logger.log(`Category created id=${savedCategory.id} userId=${userId}`);
     return savedCategory;
   }
@@ -52,8 +55,15 @@ export class CategoriesService {
     userId: number,
   ): Promise<Category> {
     const category = await this.findOne(id, userId);
+    if (
+      categoryData.name !== undefined &&
+      categoryData.name !== category.name
+    ) {
+      await this.ensureNameIsAvailable(categoryData.name, userId, id);
+    }
+
     Object.assign(category, categoryData);
-    const savedCategory = await this.categoriesRepository.save(category);
+    const savedCategory = await this.saveCategory(category);
     this.logger.log(`Category updated id=${savedCategory.id} userId=${userId}`);
     return savedCategory;
   }
@@ -62,5 +72,41 @@ export class CategoriesService {
     const category = await this.findOne(id, userId);
     await this.categoriesRepository.remove(category);
     this.logger.log(`Category deleted id=${id} userId=${userId}`);
+  }
+
+  private async ensureNameIsAvailable(
+    name: string,
+    userId: number,
+    currentCategoryId?: number,
+  ): Promise<void> {
+    const existingCategory = await this.categoriesRepository
+      .createQueryBuilder('category')
+      .where('category.userId = :userId', { userId })
+      .andWhere('LOWER(category.name) = LOWER(:name)', { name })
+      .getOne();
+
+    if (existingCategory && existingCategory.id !== currentCategoryId) {
+      throw new ConflictException('Category already exists');
+    }
+  }
+
+  private async saveCategory(category: Category): Promise<Category> {
+    try {
+      return await this.categoriesRepository.save(category);
+    } catch (error) {
+      if (this.isUniqueViolation(error)) {
+        throw new ConflictException('Category already exists');
+      }
+      throw error;
+    }
+  }
+
+  private isUniqueViolation(error: unknown): boolean {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === '23505'
+    );
   }
 }

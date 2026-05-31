@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
@@ -35,6 +36,7 @@ type MockQueryBuilder = {
   skip: jest.MockedFunction<(skip: number) => MockQueryBuilder>;
   take: jest.MockedFunction<(take: number) => MockQueryBuilder>;
   getManyAndCount: jest.MockedFunction<() => Promise<[Product[], number]>>;
+  getOne: jest.MockedFunction<() => Promise<Product | null>>;
 };
 
 const mockQueryBuilder: MockQueryBuilder = {
@@ -45,6 +47,7 @@ const mockQueryBuilder: MockQueryBuilder = {
   skip: jest.fn().mockReturnThis(),
   take: jest.fn().mockReturnThis(),
   getManyAndCount: jest.fn().mockResolvedValue([[mockProduct as Product], 1]),
+  getOne: jest.fn().mockResolvedValue(null),
 };
 
 const mockProductRepo = {
@@ -79,6 +82,7 @@ describe('ProductsService', () => {
       [mockProduct as Product],
       1,
     ]);
+    mockQueryBuilder.getOne.mockResolvedValue(null);
   });
 
   describe('findAll', () => {
@@ -156,6 +160,14 @@ describe('ProductsService', () => {
       expect(mockProductRepo.save).toHaveBeenCalledTimes(1);
     });
 
+    it('should throw ConflictException when product title already exists for the user', async () => {
+      mockQueryBuilder.getOne.mockResolvedValue(mockProduct as Product);
+
+      await expect(
+        service.create({ title: 'iPhone 15', price: 999, categoryIds: [1] }, 1),
+      ).rejects.toThrow(ConflictException);
+    });
+
     it('should throw NotFoundException when a categoryId does not exist', async () => {
       mockCategoryRepo.findBy.mockResolvedValue([]);
 
@@ -195,6 +207,22 @@ describe('ProductsService', () => {
 
       expect(result.title).toBe('Updated');
       expect(result.price).toBe(799);
+    });
+
+    it('should throw ConflictException when updating to an existing product title', async () => {
+      mockProductRepo.findOne.mockResolvedValue({
+        ...mockProduct,
+        title: 'Old title',
+      });
+      mockQueryBuilder.getOne.mockResolvedValue({
+        ...mockProduct,
+        id: 2,
+        title: 'iPhone 15',
+      } as Product);
+
+      await expect(
+        service.update(1, { title: 'iPhone 15' }, 1),
+      ).rejects.toThrow(ConflictException);
     });
 
     it('should update categories when categoryIds provided', async () => {

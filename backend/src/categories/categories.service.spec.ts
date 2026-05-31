@@ -1,12 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 
 const mockCategory = { id: 1, name: 'Electronics', userId: 1 };
 
+type MockCategoryQueryBuilder = {
+  where: jest.MockedFunction<
+    (
+      condition: string,
+      parameters: Record<string, unknown>,
+    ) => MockCategoryQueryBuilder
+  >;
+  andWhere: jest.MockedFunction<
+    (
+      condition: string,
+      parameters: Record<string, unknown>,
+    ) => MockCategoryQueryBuilder
+  >;
+  getOne: jest.MockedFunction<() => Promise<Category | null>>;
+};
+
+const mockCategoryQueryBuilder: MockCategoryQueryBuilder = {
+  where: jest.fn().mockReturnThis(),
+  andWhere: jest.fn().mockReturnThis(),
+  getOne: jest.fn().mockResolvedValue(null),
+};
+
 const mockRepo = {
+  createQueryBuilder: jest.fn().mockReturnValue(mockCategoryQueryBuilder),
   find: jest.fn(),
   findOne: jest.fn(),
   create: jest.fn(),
@@ -27,6 +54,8 @@ describe('CategoriesService', () => {
 
     service = module.get<CategoriesService>(CategoriesService);
     jest.clearAllMocks();
+    mockRepo.createQueryBuilder.mockReturnValue(mockCategoryQueryBuilder);
+    mockCategoryQueryBuilder.getOne.mockResolvedValue(null);
   });
 
   describe('findAll', () => {
@@ -98,6 +127,16 @@ describe('CategoriesService', () => {
         userId: 5,
       });
     });
+
+    it('should throw ConflictException when category name already exists for the user', async () => {
+      mockCategoryQueryBuilder.getOne.mockResolvedValue(
+        mockCategory as Category,
+      );
+
+      await expect(service.create({ name: 'Electronics' }, 1)).rejects.toThrow(
+        ConflictException,
+      );
+    });
   });
 
   describe('update', () => {
@@ -108,6 +147,19 @@ describe('CategoriesService', () => {
       const result = await service.update(1, { name: 'Updated' }, 1);
 
       expect(result.name).toBe('Updated');
+    });
+
+    it('should throw ConflictException when updating to an existing category name', async () => {
+      mockRepo.findOne.mockResolvedValue({ ...mockCategory, name: 'Books' });
+      mockCategoryQueryBuilder.getOne.mockResolvedValue({
+        id: 2,
+        name: 'Electronics',
+        userId: 1,
+      } as Category);
+
+      await expect(
+        service.update(1, { name: 'Electronics' }, 1),
+      ).rejects.toThrow(ConflictException);
     });
 
     it('should throw NotFoundException when updating non-existent category', async () => {

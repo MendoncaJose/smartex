@@ -1,4 +1,5 @@
 import { Component, inject, signal, effect, input, output, untracked } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -48,14 +49,14 @@ export class ProductDrawerComponent {
 
   constructor() {
     effect(() => {
-      const products = this.product();
+      const selectedProduct = this.product();
       untracked(() => {
-        if (products) {
+        if (selectedProduct) {
           this.form.patchValue({
-            title: products.title,
-            description: products.description ?? '',
-            price: products.price,
-            categoryIds: products.categories.map((category) => category.id),
+            title: selectedProduct.title,
+            description: selectedProduct.description ?? '',
+            price: selectedProduct.price,
+            categoryIds: selectedProduct.categories.map((category) => category.id),
           });
         } else {
           this.form.reset({ title: '', description: '', price: 0, categoryIds: [] });
@@ -102,8 +103,14 @@ export class ProductDrawerComponent {
         this.form.markAsPristine();
         this.saved.emit();
       },
-      error: () => {
-        this.toast.error(this.isEdit ? 'Failed to update product' : 'Failed to create product');
+      error: (error: HttpErrorResponse) => {
+        this.toast.error(
+          error.status === 409
+            ? 'Product already exists'
+            : this.isEdit
+              ? 'Failed to update product'
+              : 'Failed to create product',
+        );
         this.loading.set(false);
       },
     });

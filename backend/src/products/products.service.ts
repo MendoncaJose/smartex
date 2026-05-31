@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -70,6 +71,8 @@ export class ProductsService {
     productData: CreateProductDto,
     userId: number,
   ): Promise<Product> {
+    await this.ensureTitleIsAvailable(productData.title, userId);
+
     const categories = await this.resolveCategories(
       productData.categoryIds,
       userId,
@@ -81,7 +84,7 @@ export class ProductsService {
       userId,
       categories,
     });
-    const savedProduct = await this.productsRepository.save(product);
+    const savedProduct = await this.saveProduct(product);
     this.logger.log(`Product created id=${savedProduct.id} userId=${userId}`);
     return savedProduct;
   }
@@ -93,7 +96,13 @@ export class ProductsService {
   ): Promise<Product> {
     const product = await this.findOne(id, userId);
 
-    if (productData.title !== undefined) product.title = productData.title;
+    if (
+      productData.title !== undefined &&
+      productData.title !== product.title
+    ) {
+      await this.ensureTitleIsAvailable(productData.title, userId, id);
+      product.title = productData.title;
+    }
     if (productData.description !== undefined) {
       product.description = productData.description;
     }
@@ -106,7 +115,7 @@ export class ProductsService {
       );
     }
 
-    const savedProduct = await this.productsRepository.save(product);
+    const savedProduct = await this.saveProduct(product);
     this.logger.log(`Product updated id=${savedProduct.id} userId=${userId}`);
     return savedProduct;
   }
@@ -146,5 +155,41 @@ export class ProductsService {
     }
 
     return categoryIds.map((id) => categoriesById.get(id)!);
+  }
+
+  private async ensureTitleIsAvailable(
+    title: string,
+    userId: number,
+    currentProductId?: number,
+  ): Promise<void> {
+    const existingProduct = await this.productsRepository
+      .createQueryBuilder('product')
+      .where('product.userId = :userId', { userId })
+      .andWhere('LOWER(product.title) = LOWER(:title)', { title })
+      .getOne();
+
+    if (existingProduct && existingProduct.id !== currentProductId) {
+      throw new ConflictException('Product already exists');
+    }
+  }
+
+  private async saveProduct(product: Product): Promise<Product> {
+    try {
+      return await this.productsRepository.save(product);
+    } catch (error) {
+      if (this.isUniqueViolation(error)) {
+        throw new ConflictException('Product already exists');
+      }
+      throw error;
+    }
+  }
+
+  private isUniqueViolation(error: unknown): boolean {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === '23505'
+    );
   }
 }

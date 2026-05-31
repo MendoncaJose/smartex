@@ -1,4 +1,5 @@
 import { Component, inject, signal, effect, input, output, untracked } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -77,8 +78,14 @@ export class CategoryDrawerComponent {
         this.form.markAsPristine();
         this.saved.emit();
       },
-      error: () => {
-        this.toast.error(this.isEdit ? 'Failed to update category' : 'Failed to create category');
+      error: (error: HttpErrorResponse) => {
+        this.toast.error(
+          error.status === 409
+            ? 'Category already exists'
+            : this.isEdit
+              ? 'Failed to update category'
+              : 'Failed to create category',
+        );
         this.loading.set(false);
       },
     });

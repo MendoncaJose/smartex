@@ -1,5 +1,6 @@
 import {
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
@@ -13,6 +14,7 @@ import { User } from '../../users/entities/user.entity';
 import { Category } from '../../categories/entities/category.entity';
 
 @Entity('products')
+@Index('UQ_products_user_title', ['userId', 'title'], { unique: true })
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
