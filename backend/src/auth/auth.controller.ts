@@ -12,14 +12,14 @@ export class AuthController {
 
   @Post('register')
   @Throttle({ default: { ttl: 60_000, limit: 5 } })
-  register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto);
+  register(@Body() registerData: RegisterDto) {
+    return this.authService.register(registerData);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { ttl: 60_000, limit: 5 } })
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  login(@Body() loginData: LoginDto) {
+    return this.authService.login(loginData);
   }
 }

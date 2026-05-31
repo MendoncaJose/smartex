@@ -33,17 +33,17 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() dto: CreateProductDto, @CurrentUser() user: JwtUser) {
-    return this.productsService.create(dto, user.id);
+  create(@Body() productData: CreateProductDto, @CurrentUser() user: JwtUser) {
+    return this.productsService.create(productData, user.id);
   }
 
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateProductDto,
+    @Body() productData: UpdateProductDto,
     @CurrentUser() user: JwtUser,
   ) {
-    return this.productsService.update(id, dto, user.id);
+    return this.productsService.update(id, productData, user.id);
   }
 
   @Delete(':id')

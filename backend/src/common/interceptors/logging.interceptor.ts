@@ -14,15 +14,15 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(LoggingInterceptor.name);
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const req = context.switchToHttp().getRequest<Request>();
-    const res = context.switchToHttp().getResponse<Response>();
-    const { method, url } = req;
+    const request = context.switchToHttp().getRequest<Request>();
+    const response = context.switchToHttp().getResponse<Response>();
+    const { method, url } = request;
     const start = Date.now();
 
     return next.handle().pipe(
       tap(() => {
         const ms = Date.now() - start;
-        this.logger.log(`${method} ${url} ${res.statusCode} - ${ms}ms`);
+        this.logger.log(`${method} ${url} ${response.statusCode} - ${ms}ms`);
       }),
       catchError((error: unknown) => {
         const ms = Date.now() - start;

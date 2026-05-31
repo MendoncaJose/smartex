@@ -27,7 +27,7 @@ export class ProductsService {
   async findAll(userId: number, filters: FilterProductDto) {
     const { page = 1, limit = 24, search, categoryId } = filters;
 
-    const qb = this.productsRepository
+    const productsQuery = this.productsRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.categories', 'category')
       .where('product.userId = :userId', { userId })
@@ -36,23 +36,23 @@ export class ProductsService {
       .take(limit);
 
     if (search) {
-      qb.andWhere('LOWER(product.title) LIKE LOWER(:search)', {
+      productsQuery.andWhere('LOWER(product.title) LIKE LOWER(:search)', {
         search: `%${search}%`,
       });
     }
 
     if (categoryId) {
-      qb.andWhere('category.id = :categoryId', { categoryId });
+      productsQuery.andWhere('category.id = :categoryId', { categoryId });
     }
 
-    const [data, total] = await qb.getManyAndCount();
+    const [products, totalProducts] = await productsQuery.getManyAndCount();
 
     return {
-      data,
-      total,
+      data: products,
+      total: totalProducts,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(totalProducts / limit),
     };
   }
 
@@ -66,41 +66,49 @@ export class ProductsService {
     return product;
   }
 
-  async create(dto: CreateProductDto, userId: number): Promise<Product> {
-    const categories = await this.resolveCategories(dto.categoryIds, userId);
+  async create(
+    productData: CreateProductDto,
+    userId: number,
+  ): Promise<Product> {
+    const categories = await this.resolveCategories(
+      productData.categoryIds,
+      userId,
+    );
     const product = this.productsRepository.create({
-      title: dto.title,
-      description: dto.description,
-      price: dto.price,
+      title: productData.title,
+      description: productData.description,
+      price: productData.price,
       userId,
       categories,
     });
-    const saved = await this.productsRepository.save(product);
-    this.logger.log(`Product created id=${saved.id} userId=${userId}`);
-    return saved;
+    const savedProduct = await this.productsRepository.save(product);
+    this.logger.log(`Product created id=${savedProduct.id} userId=${userId}`);
+    return savedProduct;
   }
 
   async update(
     id: number,
-    dto: UpdateProductDto,
+    productData: UpdateProductDto,
     userId: number,
   ): Promise<Product> {
     const product = await this.findOne(id, userId);
 
-    if (dto.title !== undefined) product.title = dto.title;
-    if (dto.description !== undefined) product.description = dto.description;
-    if (dto.price !== undefined) product.price = dto.price;
+    if (productData.title !== undefined) product.title = productData.title;
+    if (productData.description !== undefined) {
+      product.description = productData.description;
+    }
+    if (productData.price !== undefined) product.price = productData.price;
 
-    if (dto.categoryIds !== undefined) {
+    if (productData.categoryIds !== undefined) {
       product.categories = await this.resolveCategories(
-        dto.categoryIds,
+        productData.categoryIds,
         userId,
       );
     }
 
-    const saved = await this.productsRepository.save(product);
-    this.logger.log(`Product updated id=${saved.id} userId=${userId}`);
-    return saved;
+    const savedProduct = await this.productsRepository.save(product);
+    this.logger.log(`Product updated id=${savedProduct.id} userId=${userId}`);
+    return savedProduct;
   }
 
   async remove(id: number, userId: number): Promise<void> {

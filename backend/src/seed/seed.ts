@@ -372,14 +372,16 @@ async function seed() {
 
   // Categories
   const categoryMap = new Map<string, Category>();
-  for (const name of CATEGORIES) {
-    let cat = await categoryRepo.findOne({ where: { name, userId: admin.id } });
-    if (!cat) {
-      cat = categoryRepo.create({ name, userId: admin.id });
-      cat = await categoryRepo.save(cat);
-      console.log(`Category created: ${name}`);
+  for (const categoryName of CATEGORIES) {
+    let category = await categoryRepo.findOne({
+      where: { name: categoryName, userId: admin.id },
+    });
+    if (!category) {
+      category = categoryRepo.create({ name: categoryName, userId: admin.id });
+      category = await categoryRepo.save(category);
+      console.log(`Category created: ${categoryName}`);
     }
-    categoryMap.set(name, cat);
+    categoryMap.set(categoryName, category);
   }
 
   // Products
@@ -409,7 +411,7 @@ async function seed() {
   await AppDataSource.destroy();
 }
 
-seed().catch((err) => {
-  console.error('Seed failed:', err);
+seed().catch((error: unknown) => {
+  console.error('Seed failed:', error);
   process.exit(1);
 });

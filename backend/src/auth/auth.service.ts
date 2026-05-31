@@ -19,14 +19,19 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(dto: RegisterDto) {
-    const existing = await this.usersService.findByEmail(dto.email);
-    if (existing) {
+  async register(registerData: RegisterDto) {
+    const existingUser = await this.usersService.findByEmail(
+      registerData.email,
+    );
+    if (existingUser) {
       throw new ConflictException('Email already in use');
     }
 
-    const hashed = await bcrypt.hash(dto.password, 10);
-    const user = await this.usersService.create(dto.email, hashed);
+    const hashedPassword = await bcrypt.hash(registerData.password, 10);
+    const user = await this.usersService.create(
+      registerData.email,
+      hashedPassword,
+    );
 
     this.logger.log(`User registered: ${user.email}`);
 
@@ -34,16 +39,23 @@ export class AuthService {
     return { accessToken: token };
   }
 
-  async login(dto: LoginDto) {
-    const user = await this.usersService.findByEmail(dto.email);
+  async login(loginData: LoginDto) {
+    const user = await this.usersService.findByEmail(loginData.email);
     if (!user) {
-      this.logger.warn(`Login failed — Invalid credentials: ${dto.email}`);
+      this.logger.warn(
+        `Login failed - Invalid credentials: ${loginData.email}`,
+      );
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const passwordMatch = await bcrypt.compare(dto.password, user.password);
+    const passwordMatch = await bcrypt.compare(
+      loginData.password,
+      user.password,
+    );
     if (!passwordMatch) {
-      this.logger.warn(`Login failed — Invalid credentials: ${dto.email}`);
+      this.logger.warn(
+        `Login failed - Invalid credentials: ${loginData.email}`,
+      );
       throw new UnauthorizedException('Invalid credentials');
     }
 

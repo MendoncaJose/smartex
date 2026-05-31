@@ -33,23 +33,29 @@ export class CategoriesService {
     return category;
   }
 
-  async create(dto: CreateCategoryDto, userId: number): Promise<Category> {
-    const category = this.categoriesRepository.create({ ...dto, userId });
-    const saved = await this.categoriesRepository.save(category);
-    this.logger.log(`Category created id=${saved.id} userId=${userId}`);
-    return saved;
+  async create(
+    categoryData: CreateCategoryDto,
+    userId: number,
+  ): Promise<Category> {
+    const category = this.categoriesRepository.create({
+      ...categoryData,
+      userId,
+    });
+    const savedCategory = await this.categoriesRepository.save(category);
+    this.logger.log(`Category created id=${savedCategory.id} userId=${userId}`);
+    return savedCategory;
   }
 
   async update(
     id: number,
-    dto: UpdateCategoryDto,
+    categoryData: UpdateCategoryDto,
     userId: number,
   ): Promise<Category> {
     const category = await this.findOne(id, userId);
-    Object.assign(category, dto);
-    const saved = await this.categoriesRepository.save(category);
-    this.logger.log(`Category updated id=${saved.id} userId=${userId}`);
-    return saved;
+    Object.assign(category, categoryData);
+    const savedCategory = await this.categoriesRepository.save(category);
+    this.logger.log(`Category updated id=${savedCategory.id} userId=${userId}`);
+    return savedCategory;
   }
 
   async remove(id: number, userId: number): Promise<void> {

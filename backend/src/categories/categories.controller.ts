@@ -31,17 +31,20 @@ export class CategoriesController {
   }
 
   @Post()
-  create(@Body() dto: CreateCategoryDto, @CurrentUser() user: JwtUser) {
-    return this.categoriesService.create(dto, user.id);
+  create(
+    @Body() categoryData: CreateCategoryDto,
+    @CurrentUser() user: JwtUser,
+  ) {
+    return this.categoriesService.create(categoryData, user.id);
   }
 
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateCategoryDto,
+    @Body() categoryData: UpdateCategoryDto,
     @CurrentUser() user: JwtUser,
   ) {
-    return this.categoriesService.update(id, dto, user.id);
+    return this.categoriesService.update(id, categoryData, user.id);
   }
 
   @Delete(':id')

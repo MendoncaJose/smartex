@@ -15,21 +15,21 @@ export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const req = ctx.getRequest<Request>();
-    const res = ctx.getResponse<Response>();
+    const httpContext = host.switchToHttp();
+    const request = httpContext.getRequest<Request>();
+    const httpResponse = httpContext.getResponse<Response>();
 
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const response =
+    const exceptionResponse =
       exception instanceof HttpException
         ? exception.getResponse()
         : 'Internal server error';
 
-    const message = response as HttpExceptionResponse;
+    const message = exceptionResponse as HttpExceptionResponse;
     const errorMessage =
       typeof message === 'string'
         ? message
@@ -39,16 +39,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (status >= 500) {
       this.logger.error(
-        `${req.method} ${req.url} ${status}`,
+        `${request.method} ${request.url} ${status}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
     }
 
-    res.status(status).json({
+    httpResponse.status(status).json({
       statusCode: status,
       message: errorMessage,
       error: String(HttpStatus[status] ?? 'Error'),
-      path: req.url,
+      path: request.url,
       timestamp: new Date().toISOString(),
     });
   }

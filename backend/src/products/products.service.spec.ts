@@ -198,17 +198,17 @@ describe('ProductsService', () => {
     });
 
     it('should update categories when categoryIds provided', async () => {
-      const newCat = { id: 2, name: 'Computers', userId: 1 };
+      const newCategory = { id: 2, name: 'Computers', userId: 1 };
       mockProductRepo.findOne.mockResolvedValue({ ...mockProduct });
-      mockCategoryRepo.findBy.mockResolvedValue([newCat]);
+      mockCategoryRepo.findBy.mockResolvedValue([newCategory]);
       mockProductRepo.save.mockResolvedValue({
         ...mockProduct,
-        categories: [newCat],
+        categories: [newCategory],
       });
 
       const result = await service.update(1, { categoryIds: [2] }, 1);
 
-      expect(result.categories).toEqual([newCat]);
+      expect(result.categories).toEqual([newCategory]);
     });
 
     it('should throw NotFoundException when updating non-existent product', async () => {
@@ -228,10 +228,10 @@ describe('ProductsService', () => {
     });
 
     it('should not mutate fields that are not provided', async () => {
-      const original = { ...mockProduct, description: 'original desc' };
-      mockProductRepo.findOne.mockResolvedValue(original);
-      mockProductRepo.save.mockImplementation((p: Product) =>
-        Promise.resolve(p),
+      const originalProduct = { ...mockProduct, description: 'original desc' };
+      mockProductRepo.findOne.mockResolvedValue(originalProduct);
+      mockProductRepo.save.mockImplementation((productToSave: Product) =>
+        Promise.resolve(productToSave),
       );
 
       const result = await service.update(1, { title: 'New title' }, 1);
