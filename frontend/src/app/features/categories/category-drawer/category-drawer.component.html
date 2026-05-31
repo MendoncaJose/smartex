@@ -2,8 +2,8 @@
 
   <div class="drawer-header">
     <h2 class="drawer-title">{{ isEdit ? 'Edit category' : 'New category' }}</h2>
-    <button mat-icon-button type="button" (click)="cancel()">
-      <mat-icon>close</mat-icon>
+    <button mat-icon-button type="button" aria-label="Close" (click)="cancel()">
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </div>
 
@@ -11,7 +11,7 @@
     <form [formGroup]="form">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" placeholder="Category name" />
+        <input matInput formControlName="name" placeholder="Category name" maxlength="100" />
         @if (form.controls.name.touched && form.controls.name.invalid) {
           <mat-error>Name is required</mat-error>
         }

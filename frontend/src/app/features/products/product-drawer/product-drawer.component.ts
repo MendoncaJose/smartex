@@ -40,7 +40,7 @@ export class ProductDrawerComponent {
   readonly form = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(1)]],
     description: [''],
-    price: [0, [Validators.required, Validators.min(0)]],
+    price: [0, [Validators.required, Validators.min(0.01)]],
     categoryIds: this.fb.control<number[]>([], {
       validators: [(c: AbstractControl) => (c.value?.length ? null : { required: true })],
     }),

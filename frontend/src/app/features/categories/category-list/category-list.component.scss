@@ -53,6 +53,14 @@ table {
   width: 100%;
 }
 
+.cell-truncate {
+  display: block;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 tr.mat-mdc-row {
   transition: background 0.15s;
   &:hover { background: var(--c-surface-variant); }
