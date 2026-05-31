@@ -171,10 +171,20 @@ h3 {
   letter-spacing: -0.02em;
 }
 
-// ── Mat drawer (mode=over only) — width + no border-radius ───────────────────
+// ── Mat drawer / sidenav — border-radius overrides ───────────────────────────
 .mat-drawer-over {
   width: min(520px, 100vw) !important;
   border-radius: 0 !important;
+}
+
+.mat-drawer-side {
+  border-radius: 0 !important;
+}
+
+.sidebar .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 // ── Toast notifications ───────────────────────────────────────────────────────

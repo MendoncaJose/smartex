@@ -1,7 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,7 +19,6 @@ interface NavItem {
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,
-    MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -31,18 +29,12 @@ interface NavItem {
 export class MainLayoutComponent {
   private readonly auth = inject(AuthService);
 
-  readonly collapsed = signal(false);
-
   readonly navItems: NavItem[] = [
     { label: 'Products', icon: 'inventory_2', route: '/products' },
     { label: 'Categories', icon: 'label', route: '/categories' },
   ];
 
   readonly userEmail = this.auth.currentUser;
-
-  toggle() {
-    this.collapsed.update((v) => !v);
-  }
 
   logout() {
     this.auth.logout();
