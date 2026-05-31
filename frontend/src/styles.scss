@@ -29,6 +29,12 @@
 
   // Semantic
   --c-error: oklch(0.53 0.22 25);
+
+  // Motion
+  --motion-duration-fast: 150ms;
+  --motion-duration-drawer: 200ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 html {
@@ -175,16 +181,37 @@ h3 {
 .mat-drawer-over {
   width: min(520px, 100vw) !important;
   border-radius: 0 !important;
+  transition-duration: var(--motion-duration-drawer) !important;
+  transition-timing-function: var(--motion-ease-out-quart) !important;
 }
 
 .mat-drawer-side {
   border-radius: 0 !important;
+  transition-duration: var(--motion-duration-drawer) !important;
+  transition-timing-function: var(--motion-ease-out-quart) !important;
+}
+
+.mat-drawer-content,
+.mat-drawer-backdrop {
+  transition-duration: var(--motion-duration-drawer) !important;
+  transition-timing-function: var(--motion-ease-out-quart) !important;
 }
 
 .sidebar .mat-drawer-inner-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
 }
 
 // ── Toast notifications ───────────────────────────────────────────────────────

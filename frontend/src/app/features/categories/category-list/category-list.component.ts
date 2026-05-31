@@ -45,6 +45,7 @@ export class CategoryListComponent implements OnInit {
 
   readonly categories = signal<Category[]>([]);
   readonly loading = signal(false);
+  readonly skeletonRows = Array.from({ length: 6 }, (_, index) => index);
 
   readonly searchControl = new FormControl('');
   readonly searchTerm = toSignal(

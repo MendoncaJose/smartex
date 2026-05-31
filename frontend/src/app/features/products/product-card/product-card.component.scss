@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition:
+    box-shadow var(--motion-duration-drawer) var(--motion-ease-standard),
+    transform var(--motion-duration-drawer) var(--motion-ease-out-quart);
 
   &:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
