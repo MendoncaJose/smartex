@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
@@ -64,7 +65,7 @@ export class CategoryListComponent implements OnInit {
     this.loadCategories();
 
     this.searchControl.valueChanges
-      .pipe(debounceTime(250), distinctUntilChanged())
+      .pipe(debounceTime(250), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe((v) => this.searchTerm.set(v ?? ''));
   }
 

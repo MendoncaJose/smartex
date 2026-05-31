@@ -1,4 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -65,16 +66,18 @@ export class ProductListComponent implements OnInit {
     this.loadProducts();
 
     this.searchControl.valueChanges
-      .pipe(debounceTime(350), distinctUntilChanged())
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(() => {
         this.page.set(0);
         this.loadProducts();
       });
 
-    this.categoryControl.valueChanges.subscribe(() => {
-      this.page.set(0);
-      this.loadProducts();
-    });
+    this.categoryControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        this.page.set(0);
+        this.loadProducts();
+      });
   }
 
   loadProducts() {
