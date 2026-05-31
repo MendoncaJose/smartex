@@ -1,55 +1,97 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+// ── Design system tokens ──────────────────────────────────────────────────────
+:root {
+  // Primary — Botanical Confidence
+  --c-primary:               oklch(0.42 0.18 145);
+  --c-primary-hover:         oklch(0.37 0.16 145);
+  --c-primary-container:     oklch(0.93 0.06 145);
+  --c-on-primary:            oklch(1.000 0.000 0);
+  --c-on-primary-container:  oklch(0.22 0.12 145);
+
+  // Navigation — Night Garden
+  --c-sidebar:               oklch(0.15 0.035 145);
+  --c-sidebar-accent:        oklch(0.76 0.16 145);
+  --c-sidebar-text:          oklch(0.58 0.055 145);
+  --c-sidebar-text-active:   oklch(0.96 0.015 145);
+
+  // Surfaces
+  --c-surface:               oklch(1.000 0.000 0);
+  --c-surface-variant:       oklch(0.96 0.005 145);
+
+  // Text
+  --c-ink:                   oklch(0.17 0.008 145);
+  --c-muted:                 oklch(0.46 0.010 145);
+
+  // Borders
+  --c-outline:               oklch(0.68 0.010 145);
+  --c-outline-variant:       oklch(0.88 0.006 145);
+
+  // Semantic
+  --c-error:                 oklch(0.53 0.22 25);
+}
 
 html {
   height: 100%;
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        primary:   mat.$green-palette,
+        secondary: mat.$green-palette,
+        tertiary:  mat.$cyan-palette,
       ),
-      typography: Roboto,
+      typography: 'DM Sans',
       density: 0,
     )
   );
+
+  // Override Material system variables with botanical tokens
+  --mat-sys-primary:               var(--c-primary);
+  --mat-sys-on-primary:            var(--c-on-primary);
+  --mat-sys-primary-container:     var(--c-primary-container);
+  --mat-sys-on-primary-container:  var(--c-on-primary-container);
+  --mat-sys-secondary-container:   var(--c-primary-container);
+  --mat-sys-on-secondary-container: var(--c-on-primary-container);
+  --mat-sys-surface:               var(--c-surface);
+  --mat-sys-surface-variant:       var(--c-surface-variant);
+  --mat-sys-on-surface:            var(--c-ink);
+  --mat-sys-on-surface-variant:    var(--c-muted);
+  --mat-sys-outline:               var(--c-outline);
+  --mat-sys-outline-variant:       var(--c-outline-variant);
+  --mat-sys-error:                 var(--c-error);
+  --mat-sys-on-error:              var(--c-on-primary);
+  --mat-sys-body-medium-size:      1rem;
+  --mat-sys-body-font:             'DM Sans', system-ui, sans-serif;
+  --mat-sys-label-font:            'DM Sans', system-ui, sans-serif;
+  --mat-sys-title-font:            'DM Sans', system-ui, sans-serif;
+  --mat-sys-headline-font:         'DM Sans', system-ui, sans-serif;
+  --mat-sys-display-font:          'DM Sans', system-ui, sans-serif;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
+  background-color: var(--c-surface-variant);
+  color: var(--c-ink);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
   margin: 0;
   height: 100%;
 }
+
 * { box-sizing: border-box; }
 
-// ngx-toastr custom styles
+// ── Toast notifications ───────────────────────────────────────────────────────
 .toast-container .ngx-toastr {
   width: 380px !important;
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: var(--c-surface);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   padding: 14px 20px 14px 56px;
+  font-family: 'DM Sans', system-ui, sans-serif;
   transition: box-shadow 0.2s ease;
 
-  &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  }
+  &:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); }
 
   .toast-title {
     font-weight: 600;
@@ -58,46 +100,43 @@ body {
   }
 
   .toast-message {
-    color: #444;
+    color: var(--c-muted);
     font-size: 0.85rem;
   }
 
   .toast-close-button {
     font-size: 1rem;
     opacity: 0.6;
-
     &:hover { opacity: 1; }
   }
 
-  @media (max-width: 480px) {
-    width: 100% !important;
-  }
+  @media (max-width: 480px) { width: 100% !important; }
 }
 
 .toast-success {
-  background-color: #ffffff;
-  .toast-title   { color: #2e7d32; }
-  .toast-progress { background-color: #2e7d32; }
-  .toast-close-button { color: #2e7d32; }
+  background-color: var(--c-surface);
+  .toast-title        { color: oklch(0.38 0.16 145); }
+  .toast-progress     { background-color: oklch(0.38 0.16 145); }
+  .toast-close-button { color: oklch(0.38 0.16 145); }
 }
 
 .toast-error {
-  background-color: #ffffff;
-  .toast-title   { color: #c62828; }
-  .toast-progress { background-color: #c62828; }
-  .toast-close-button { color: #c62828; }
+  background-color: var(--c-surface);
+  .toast-title        { color: var(--c-error); }
+  .toast-progress     { background-color: var(--c-error); }
+  .toast-close-button { color: var(--c-error); }
 }
 
 .toast-warning {
-  background-color: #ffffff;
-  .toast-title   { color: #e65100; }
-  .toast-progress { background-color: #e65100; }
-  .toast-close-button { color: #e65100; }
+  background-color: var(--c-surface);
+  .toast-title        { color: oklch(0.55 0.18 50); }
+  .toast-progress     { background-color: oklch(0.55 0.18 50); }
+  .toast-close-button { color: oklch(0.55 0.18 50); }
 }
 
 .toast-info {
-  background-color: #ffffff;
-  .toast-title   { color: #0277bd; }
-  .toast-progress { background-color: #0277bd; }
-  .toast-close-button { color: #0277bd; }
+  background-color: var(--c-surface);
+  .toast-title        { color: oklch(0.50 0.14 230); }
+  .toast-progress     { background-color: oklch(0.50 0.14 230); }
+  .toast-close-button { color: oklch(0.50 0.14 230); }
 }

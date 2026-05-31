@@ -25,7 +25,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
-  color: var(--mat-sys-on-surface);
+  color: var(--c-ink);
   flex-shrink: 0;
 }
 
@@ -60,7 +60,7 @@
   justify-content: center;
   min-height: 300px;
   gap: 16px;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--c-muted);
 
   mat-icon {
     font-size: 48px;
